@@ -13,9 +13,14 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
-    view.backgroundColor = .systemBackground
+    setupViews()
   }
 
-
+  private func setupViews() {
+    view.backgroundColor = .systemBackground
+    let containerView = UINib(nibName: "HomeView", bundle: .main).instantiate(withOwner: nil, options: nil).first as! UIView
+    containerView.frame = view.bounds
+    view.addSubview(containerView)
+  }
 }
 

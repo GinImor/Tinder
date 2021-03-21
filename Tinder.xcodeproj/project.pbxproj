@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DC60C38E2607860400D6052E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC60C38D2607860400D6052E /* HomeView.swift */; };
+		DC60C3902607864900D6052E /* HomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC60C38F2607864900D6052E /* HomeView.xib */; };
 		DCBEEAEB2607684F00B71F16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEA2607684F00B71F16 /* AppDelegate.swift */; };
 		DCBEEAED2607684F00B71F16 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEC2607684F00B71F16 /* SceneDelegate.swift */; };
 		DCBEEAEF2607684F00B71F16 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEE2607684F00B71F16 /* ViewController.swift */; };
@@ -15,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DC60C38D2607860400D6052E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		DC60C38F2607864900D6052E /* HomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeView.xib; sourceTree = "<group>"; };
 		DCBEEAE72607684F00B71F16 /* Tinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCBEEAEA2607684F00B71F16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCBEEAEC2607684F00B71F16 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -55,8 +59,10 @@
 			isa = PBXGroup;
 			children = (
 				DCBEEAEE2607684F00B71F16 /* ViewController.swift */,
+				DC60C38D2607860400D6052E /* HomeView.swift */,
 				DCBEEAFE260768C500B71F16 /* Supporting files */,
 				DCBEEAF82607685000B71F16 /* Info.plist */,
+				DC60C38F2607864900D6052E /* HomeView.xib */,
 			);
 			path = Tinder;
 			sourceTree = "<group>";
@@ -132,6 +138,7 @@
 			files = (
 				DCBEEAF72607685000B71F16 /* LaunchScreen.storyboard in Resources */,
 				DCBEEAF42607685000B71F16 /* Assets.xcassets in Resources */,
+				DC60C3902607864900D6052E /* HomeView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCBEEAEF2607684F00B71F16 /* ViewController.swift in Sources */,
+				DC60C38E2607860400D6052E /* HomeView.swift in Sources */,
 				DCBEEAEB2607684F00B71F16 /* AppDelegate.swift in Sources */,
 				DCBEEAED2607684F00B71F16 /* SceneDelegate.swift in Sources */,
 			);
