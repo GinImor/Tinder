@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+  let containerView = UINib(nibName: "HomeView", bundle: .main).instantiate(withOwner: nil, options: nil).first as! UIView
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
@@ -18,9 +20,11 @@ class ViewController: UIViewController {
 
   private func setupViews() {
     view.backgroundColor = .systemBackground
-    let containerView = UINib(nibName: "HomeView", bundle: .main).instantiate(withOwner: nil, options: nil).first as! UIView
     containerView.frame = view.bounds
     view.addSubview(containerView)
   }
+  
+
+  
 }
 
