@@ -29,8 +29,8 @@ class CardView: UIView {
     layer.cornerRadius = ceil(bounds.width * 0.05)
     layer.masksToBounds = true
     
-    visualEffectView.layer.maskedCorners = .layerMaxXMinYCorner
-    visualEffectView.layer.cornerRadius = ceil(visualEffectView.bounds.width * 0.05)
+    visualEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    visualEffectView.layer.cornerRadius = 8
     visualEffectView.layer.masksToBounds = true
   }
   

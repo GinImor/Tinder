@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DC07706526088E630034C547 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC07706426088E630034C547 /* User.swift */; };
 		DC07706A26088FF90034C547 /* UIView+layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC07706926088FF90034C547 /* UIView+layout.swift */; };
+		DC07706E2608C8960034C547 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC07706D2608C8960034C547 /* CardViewModel.swift */; };
 		DC1A0AF626088A7B002C7885 /* CardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC1A0AF526088A7B002C7885 /* CardView.xib */; };
 		DC1A0AF926088A99002C7885 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1A0AF826088A99002C7885 /* CardView.swift */; };
 		DC60C38E2607860400D6052E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC60C38D2607860400D6052E /* HomeView.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		DC07706426088E630034C547 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		DC07706926088FF90034C547 /* UIView+layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+layout.swift"; sourceTree = "<group>"; };
+		DC07706D2608C8960034C547 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		DC1A0AF526088A7B002C7885 /* CardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardView.xib; sourceTree = "<group>"; };
 		DC1A0AF826088A99002C7885 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		DC60C38D2607860400D6052E /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -53,6 +55,22 @@
 				DC07706926088FF90034C547 /* UIView+layout.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		DC07706B2608C8720034C547 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DCBEEAEE2607684F00B71F16 /* HomeController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		DC07706C2608C87E0034C547 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DC07706D2608C8960034C547 /* CardViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		DC1A0AF126088A1F002C7885 /* Views */ = {
@@ -109,10 +127,11 @@
 		DCBEEAE92607684F00B71F16 /* Tinder */ = {
 			isa = PBXGroup;
 			children = (
-				DC07706626088F940034C547 /* Extensions */,
+				DC07706C2608C87E0034C547 /* ViewModels */,
+				DC07706B2608C8720034C547 /* Controllers */,
 				DC1A0AF226088A3E002C7885 /* Models */,
 				DC1A0AF126088A1F002C7885 /* Views */,
-				DCBEEAEE2607684F00B71F16 /* HomeController.swift */,
+				DC07706626088F940034C547 /* Extensions */,
 				DCBEEAFE260768C500B71F16 /* Supporting files */,
 				DCBEEAF82607685000B71F16 /* Info.plist */,
 			);
@@ -206,6 +225,7 @@
 				DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */,
 				DC60C38E2607860400D6052E /* HomeView.swift in Sources */,
 				DC07706526088E630034C547 /* User.swift in Sources */,
+				DC07706E2608C8960034C547 /* CardViewModel.swift in Sources */,
 				DCBEEAEB2607684F00B71F16 /* AppDelegate.swift in Sources */,
 				DCBEEAED2607684F00B71F16 /* SceneDelegate.swift in Sources */,
 				DC1A0AF926088A99002C7885 /* CardView.swift in Sources */,

@@ -16,6 +16,8 @@ extension UINib {
 }
 class HomeController: UIViewController {
 
+  var cardViewModel = CardViewModel()
+  
   var users: [User] = [
     User(name: "Joey", age: 27, profession: "actor", imageName: ""),
     User(name: "Ross", age: 28, profession: "professor", imageName: "")
@@ -39,9 +41,8 @@ class HomeController: UIViewController {
     cardDeckView.layer.zPosition = 10
     users.forEach { (user) in
       let cardView = UINib.viewWithName("CardView") as! CardView
-      cardView.nameLabel.text = user.name
-      cardView.ageLabel.text = "\(user.age)"
-      cardView.professionLabel.text = user.profession
+      cardViewModel.setModel(.user(user))
+      cardViewModel.configure(cardView)
       cardDeckView.addSubview(cardView)
       cardView.pinToSuperviewEdges()
     }
