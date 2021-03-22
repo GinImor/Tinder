@@ -46,22 +46,9 @@
                                 </button>
                             </subviews>
                         </stackView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H4P-Ra-qfQ">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5d8-7A-nIx" userLabel="Card Deck View">
                             <rect key="frame" x="0.0" y="44" width="382" height="677.5"/>
-                            <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="25" translatesAutoresizingMaskIntoConstraints="NO" id="Pbr-Ca-d7N">
-                                    <rect key="frame" x="0.0" y="0.0" width="382" height="677.5"/>
-                                    <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </imageView>
-                            </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                            <gestureRecognizers/>
-                            <constraints>
-                                <constraint firstItem="Pbr-Ca-d7N" firstAttribute="leading" secondItem="H4P-Ra-qfQ" secondAttribute="leading" id="99A-bG-Hdm"/>
-                                <constraint firstItem="Pbr-Ca-d7N" firstAttribute="top" secondItem="H4P-Ra-qfQ" secondAttribute="top" id="W1r-ul-lqc"/>
-                                <constraint firstAttribute="trailing" secondItem="Pbr-Ca-d7N" secondAttribute="trailing" id="l1v-UI-lX1"/>
-                                <constraint firstAttribute="bottom" secondItem="Pbr-Ca-d7N" secondAttribute="bottom" id="u9d-81-cZ3"/>
-                            </constraints>
                         </view>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="by2-YI-BeM">
                             <rect key="frame" x="0.0" y="737.5" width="382" height="48.5"/>
@@ -125,7 +112,7 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
-                <outlet property="cardView" destination="H4P-Ra-qfQ" id="LK1-9k-hdp"/>
+                <outlet property="cardDeckView" destination="5d8-7A-nIx" id="K8G-fi-shv"/>
                 <outlet property="topStackView" destination="0Qz-E2-dmS" id="12V-Yz-n5B"/>
             </connections>
             <point key="canvasLocation" x="92.753623188405811" y="152.67857142857142"/>
