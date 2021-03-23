@@ -10,9 +10,8 @@ import UIKit
 
 class CardView: UIView {
   
-  @IBOutlet weak var nameLabel: UILabel!
-  @IBOutlet weak var ageLabel: UILabel!
-  @IBOutlet weak var professionLabel: UILabel!
+  @IBOutlet weak var informationLabel: UILabel!
+  @IBOutlet weak var imageView: UIImageView!
   
   @IBOutlet weak var visualEffectView: UIVisualEffectView!
   

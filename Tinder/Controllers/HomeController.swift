@@ -18,9 +18,10 @@ class HomeController: UIViewController {
 
   var cardViewModel = CardViewModel()
   
-  var users: [User] = [
-    User(name: "Joey", age: 27, profession: "actor", imageName: ""),
-    User(name: "Ross", age: 28, profession: "professor", imageName: "")
+  var modelTypes: [CardModel] = [
+    User(name: "Joey", age: 27, profession: "actor", imageName: "joey"),
+    Advertiser(title: "WWDC", brand: "Apple", posterImageName: "wwdc"),
+    User(name: "Ross", age: 28, profession: "professor", imageName: "ross")
   ]
   
   let containerView = UINib.viewWithName("HomeView") as! HomeView
@@ -39,9 +40,9 @@ class HomeController: UIViewController {
     let cardDeckView = containerView.cardDeckView!
     // zPosition take effect when the views are in the same level
     cardDeckView.layer.zPosition = 10
-    users.forEach { (user) in
+    modelTypes.forEach { (modelType) in
       let cardView = UINib.viewWithName("CardView") as! CardView
-      cardViewModel.setModel(.user(user))
+      cardViewModel.setModel(modelType)
       cardViewModel.configure(cardView)
       cardDeckView.addSubview(cardView)
       cardView.pinToSuperviewEdges()

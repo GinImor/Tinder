@@ -19,6 +19,7 @@
 		DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEE2607684F00B71F16 /* HomeController.swift */; };
 		DCBEEAF42607685000B71F16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCBEEAF32607685000B71F16 /* Assets.xcassets */; };
 		DCBEEAF72607685000B71F16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DCBEEAF52607685000B71F16 /* LaunchScreen.storyboard */; };
+		DCDA51602608E73B00AC2194 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDA515F2608E73B00AC2194 /* Advertiser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		DCBEEAF32607685000B71F16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DCBEEAF62607685000B71F16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DCBEEAF82607685000B71F16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DCDA515F2608E73B00AC2194 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Advertiser.swift; path = Tinder/Advertiser.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				DC07706426088E630034C547 /* User.swift */,
+				DCDA515F2608E73B00AC2194 /* Advertiser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			files = (
 				DC07706A26088FF90034C547 /* UIView+layout.swift in Sources */,
 				DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */,
+				DCDA51602608E73B00AC2194 /* Advertiser.swift in Sources */,
 				DC60C38E2607860400D6052E /* HomeView.swift in Sources */,
 				DC07706526088E630034C547 /* User.swift in Sources */,
 				DC07706E2608C8960034C547 /* CardViewModel.swift in Sources */,
