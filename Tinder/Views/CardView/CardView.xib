@@ -21,19 +21,29 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="tqo-pz-neq">
+                    <rect key="frame" x="8" y="8" width="398" height="5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="5" id="ZXe-W3-e8k"/>
+                    </constraints>
+                </stackView>
             </subviews>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="PNS-i5-MxJ" firstAttribute="trailing" secondItem="AVz-ec-N8S" secondAttribute="trailing" constant="8" id="Ytc-9Q-LZA"/>
                 <constraint firstItem="AVz-ec-N8S" firstAttribute="leading" secondItem="PNS-i5-MxJ" secondAttribute="leading" constant="8" id="b6e-8h-3Au"/>
+                <constraint firstItem="PNS-i5-MxJ" firstAttribute="trailing" secondItem="tqo-pz-neq" secondAttribute="trailing" constant="8" id="dtJ-LL-67p"/>
                 <constraint firstAttribute="bottom" secondItem="8D6-Y8-C9x" secondAttribute="bottom" id="ep8-Wm-gTy"/>
                 <constraint firstItem="8D6-Y8-C9x" firstAttribute="leading" secondItem="J1R-LT-9Ap" secondAttribute="leading" id="gOT-4V-aGr"/>
                 <constraint firstItem="PNS-i5-MxJ" firstAttribute="bottom" secondItem="AVz-ec-N8S" secondAttribute="bottom" constant="8" id="nGE-k3-aUZ"/>
                 <constraint firstAttribute="trailing" secondItem="8D6-Y8-C9x" secondAttribute="trailing" id="pKX-1S-vAf"/>
+                <constraint firstItem="tqo-pz-neq" firstAttribute="top" secondItem="J1R-LT-9Ap" secondAttribute="top" constant="8" id="qlN-m7-Q5X"/>
                 <constraint firstItem="8D6-Y8-C9x" firstAttribute="top" secondItem="J1R-LT-9Ap" secondAttribute="top" id="tuE-WA-Lh9"/>
+                <constraint firstItem="tqo-pz-neq" firstAttribute="leading" secondItem="PNS-i5-MxJ" secondAttribute="leading" constant="8" id="v0N-xf-8x1"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="PNS-i5-MxJ"/>
             <connections>
+                <outlet property="barIndicators" destination="tqo-pz-neq" id="VA3-Mf-TCB"/>
                 <outlet property="imageView" destination="8D6-Y8-C9x" id="Kyu-qi-7Qk"/>
                 <outlet property="informationLabel" destination="AVz-ec-N8S" id="XYt-vq-uim"/>
             </connections>

@@ -11,6 +11,7 @@ import UIKit
 class CardView: UIView {
   
   let gradientLayer = CAGradientLayer()
+  var imageNames: [String] = []
   
   @IBOutlet weak var imageView: UIImageView!
   
@@ -22,6 +23,8 @@ class CardView: UIView {
     }
   }
   
+  @IBOutlet weak var barIndicators: UIStackView!
+  
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     setup()
@@ -29,6 +32,7 @@ class CardView: UIView {
   
   private func setup() {
     addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
+    addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
   }
   
   override func layoutSubviews() {
@@ -41,9 +45,46 @@ class CardView: UIView {
     )
   }
   
+  private var barDefaultColor = UIColor(white: 0.0, alpha: 0.1)
+  private var imageIndex = 0
+  
+  func setImageNames(_ imageNames: [String]) {
+    guard !imageNames.isEmpty else { return }
+    
+    self.imageNames = imageNames
+    let firstImageName = imageNames[0]
+    imageView.image = UIImage(named: firstImageName)
+    
+    guard imageNames.count > 1 else { return }
+    barIndicators.isHidden = false
+    (0..<imageNames.count).forEach { (_) in
+      let barIndicator = UIView()
+      barIndicator.backgroundColor = barDefaultColor
+      barIndicators.addArrangedSubview(barIndicator)
+    }
+    barIndicators.arrangedSubviews[0].backgroundColor = .white
+  }
+  
   func addCornerEffect() {
     layer.cornerRadius = ceil(bounds.width * 0.05)
     layer.masksToBounds = true
+  }
+  
+  private func advanceImageIndex(byStep step: Int) -> Int {
+    ((imageIndex + step) % imageNames.count + imageNames.count) % imageNames.count
+  }
+  
+  @objc func handleTap(_ tap: UITapGestureRecognizer) {
+    guard !barIndicators.isHidden else { return }
+    barIndicators.arrangedSubviews[imageIndex].backgroundColor = barDefaultColor
+    let location = tap.location(in: self)
+    if location.x > bounds.width / 2 {
+      imageIndex = advanceImageIndex(byStep: 1)
+    } else {
+      imageIndex = advanceImageIndex(byStep: -1)
+    }
+    barIndicators.arrangedSubviews[imageIndex].backgroundColor = .white
+    imageView.image = UIImage(named: imageNames[imageIndex])
   }
   
   private func transform(for translation: CGPoint) -> CGAffineTransform {

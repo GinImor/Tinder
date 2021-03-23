@@ -19,9 +19,9 @@ class HomeController: UIViewController {
   var cardViewModel = CardViewModel()
   
   var modelTypes: [CardModel] = [
-    User(name: "Joey", age: 27, profession: "actor", imageName: "joey"),
+    User(name: "Joey", age: 27, profession: "actor", imageNames: ["joey", "joey2"]),
     Advertiser(title: "WWDC", brand: "Apple", posterImageName: "wwdc"),
-    User(name: "Ross", age: 28, profession: "professor", imageName: "ross")
+    User(name: "Ross", age: 28, profession: "professor", imageNames: ["ross", "ross2", "ross3"])
   ]
   
   let containerView = UINib.viewWithName("HomeView") as! HomeView

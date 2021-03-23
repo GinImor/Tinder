@@ -11,7 +11,7 @@ import UIKit
 protocol CardModel {
   var attributedString: NSAttributedString { get }
   var textAlignment: NSTextAlignment { get }
-  var imageName: String { get }
+  var imageNames: [String] { get }
 }
 
 extension User: CardModel {
@@ -41,7 +41,7 @@ extension Advertiser: CardModel {
   
   var textAlignment: NSTextAlignment { .center }
   
-  var imageName: String { posterImageName }
+  var imageNames: [String] { [posterImageName] }
 }
 
 class CardViewModel {
@@ -56,7 +56,7 @@ class CardViewModel {
     guard let cardModel = self.cardModel else { return }
     cardView.informationLabel.attributedText = cardModel.attributedString
     cardView.informationLabel.textAlignment = cardModel.textAlignment
-    cardView.imageView.image = UIImage(named: cardModel.imageName)
+    cardView.setImageNames(cardModel.imageNames)
   }
   
 }
