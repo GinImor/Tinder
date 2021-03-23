@@ -10,10 +10,17 @@ import UIKit
 
 class CardView: UIView {
   
-  @IBOutlet weak var informationLabel: UILabel!
+  let gradientLayer = CAGradientLayer()
+  
   @IBOutlet weak var imageView: UIImageView!
   
-  @IBOutlet weak var visualEffectView: UIVisualEffectView!
+  @IBOutlet weak var informationLabel: UILabel!  {
+    didSet {
+      gradientLayer.colors = [UIColor.clear, .black].map { $0.cgColor }
+      gradientLayer.locations = [0.0, 3.0]
+      layer.insertSublayer(gradientLayer, below: informationLabel.layer)
+    }
+  }
   
   required init?(coder: NSCoder) {
     super.init(coder: coder)
@@ -24,13 +31,19 @@ class CardView: UIView {
     addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
   }
   
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    gradientLayer.frame = CGRect(
+      x: informationLabel.frame.minX - 8,
+      y: informationLabel.frame.minY,
+      width: informationLabel.frame.width + 16,
+      height: informationLabel.frame.height + 8
+    )
+  }
+  
   func addCornerEffect() {
     layer.cornerRadius = ceil(bounds.width * 0.05)
     layer.masksToBounds = true
-    
-    visualEffectView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    visualEffectView.layer.cornerRadius = 8
-    visualEffectView.layer.masksToBounds = true
   }
   
   private func transform(for translation: CGPoint) -> CGAffineTransform {
@@ -51,7 +64,7 @@ class CardView: UIView {
   }
   
   private func handlePanEnded(_ pan: UIPanGestureRecognizer) {
-    let threshold = frame.width * 0.4
+    let threshold = frame.width * 0.3
     let translation = pan.translation(in: superview)
     
     if abs(translation.x) > threshold {

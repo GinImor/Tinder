@@ -14,38 +14,21 @@
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="25" verticalCompressionResistancePriority="25" translatesAutoresizingMaskIntoConstraints="NO" id="8D6-Y8-C9x">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </imageView>
-                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5y-d8-qDC">
-                    <rect key="frame" x="0.0" y="843.5" width="414" height="52.5"/>
-                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="kF4-DE-TJN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="53"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AVz-ec-N8S">
-                                <rect key="frame" x="8" y="16" width="398" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="AVz-ec-N8S" secondAttribute="bottom" constant="16" id="88Z-xC-2zm"/>
-                            <constraint firstItem="AVz-ec-N8S" firstAttribute="leading" secondItem="kF4-DE-TJN" secondAttribute="leading" constant="8" id="SMx-KA-gNs"/>
-                            <constraint firstItem="AVz-ec-N8S" firstAttribute="top" secondItem="kF4-DE-TJN" secondAttribute="top" constant="16" id="gJW-wS-arT"/>
-                            <constraint firstAttribute="trailing" secondItem="AVz-ec-N8S" secondAttribute="trailing" constant="8" id="vrc-8f-YmU"/>
-                        </constraints>
-                    </view>
-                    <blurEffect style="systemUltraThinMaterialDark"/>
-                </visualEffectView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AVz-ec-N8S">
+                    <rect key="frame" x="8" y="833.5" width="398" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="L5y-d8-qDC" secondAttribute="bottom" id="Cn1-sL-SIq"/>
-                <constraint firstItem="PNS-i5-MxJ" firstAttribute="trailing" secondItem="L5y-d8-qDC" secondAttribute="trailing" id="WNU-tW-bsx"/>
+                <constraint firstItem="PNS-i5-MxJ" firstAttribute="trailing" secondItem="AVz-ec-N8S" secondAttribute="trailing" constant="8" id="Ytc-9Q-LZA"/>
+                <constraint firstItem="AVz-ec-N8S" firstAttribute="leading" secondItem="PNS-i5-MxJ" secondAttribute="leading" constant="8" id="b6e-8h-3Au"/>
                 <constraint firstAttribute="bottom" secondItem="8D6-Y8-C9x" secondAttribute="bottom" id="ep8-Wm-gTy"/>
                 <constraint firstItem="8D6-Y8-C9x" firstAttribute="leading" secondItem="J1R-LT-9Ap" secondAttribute="leading" id="gOT-4V-aGr"/>
-                <constraint firstItem="L5y-d8-qDC" firstAttribute="leading" secondItem="J1R-LT-9Ap" secondAttribute="leading" id="hDv-Fx-Q6A"/>
+                <constraint firstItem="PNS-i5-MxJ" firstAttribute="bottom" secondItem="AVz-ec-N8S" secondAttribute="bottom" constant="8" id="nGE-k3-aUZ"/>
                 <constraint firstAttribute="trailing" secondItem="8D6-Y8-C9x" secondAttribute="trailing" id="pKX-1S-vAf"/>
                 <constraint firstItem="8D6-Y8-C9x" firstAttribute="top" secondItem="J1R-LT-9Ap" secondAttribute="top" id="tuE-WA-Lh9"/>
             </constraints>
@@ -53,7 +36,6 @@
             <connections>
                 <outlet property="imageView" destination="8D6-Y8-C9x" id="Kyu-qi-7Qk"/>
                 <outlet property="informationLabel" destination="AVz-ec-N8S" id="XYt-vq-uim"/>
-                <outlet property="visualEffectView" destination="L5y-d8-qDC" id="Ld9-Ml-bXB"/>
             </connections>
             <point key="canvasLocation" x="143" y="-492"/>
         </view>
