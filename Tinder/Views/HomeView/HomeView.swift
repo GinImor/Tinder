@@ -10,6 +10,8 @@ import UIKit
 
 class HomeView: UIView {
 
+  @IBOutlet weak var settingsButton: UIButton!
+  
   @IBOutlet weak var topStackView: UIStackView! {
     didSet {
       topStackView.isLayoutMarginsRelativeArrangement = true

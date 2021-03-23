@@ -12,8 +12,8 @@ extension UINib {
   static func viewWithName(_ nibName: String) -> UIView {
     UINib(nibName: nibName, bundle: .main).instantiate(withOwner: nil, options: nil).first as! UIView
   }
-
 }
+
 class HomeController: UIViewController {
 
   var cardViewModel = CardViewModel()
@@ -37,6 +37,8 @@ class HomeController: UIViewController {
     containerView.frame = view.bounds
     view.addSubview(containerView)
     
+    containerView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+    
     let cardDeckView = containerView.cardDeckView!
     // zPosition take effect when the views are in the same level
     cardDeckView.layer.zPosition = 10
@@ -47,6 +49,11 @@ class HomeController: UIViewController {
       cardDeckView.addSubview(cardView)
       cardView.pinToSuperviewEdges()
     }
+  }
+  
+  @objc func handleSettings() {
+    let registration = RegistrationController()
+    present(registration, animated: true)
   }
   
 

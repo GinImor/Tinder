@@ -113,6 +113,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="cardDeckView" destination="5d8-7A-nIx" id="K8G-fi-shv"/>
+                <outlet property="settingsButton" destination="j5D-hb-QJg" id="1EV-1A-CmD"/>
                 <outlet property="topStackView" destination="0Qz-E2-dmS" id="12V-Yz-n5B"/>
             </connections>
             <point key="canvasLocation" x="92.753623188405811" y="152.67857142857142"/>
