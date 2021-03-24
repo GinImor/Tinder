@@ -56,27 +56,21 @@ enum TinderFirebaseService {
         completion(error)
         return
       }
-//      guard let uid = authResult?.user.uid,
-//        let imageData = profileImageDataProvider() else {
-//          completion(NSError())
-//          return
-//      }
-//
-//      storeContentData(imageData, forChild: .profileImages) { imageUrl, error in
-//        guard error == nil else {
-//          completion(error)
-//          return
-//        }
-//        storeMetaData(
-//          forChild: DatabaseChild.users(uid: uid),
-//          metaDataProvider: {
-//            return ["username": username, "profileImageUrl": imageUrl!]
-//          },
-//          completion: { error in
-//            completion(error)
-//          }
-//        )
-//      }
+      guard let _ = authResult?.user.uid,
+        let imageData = profileImageDataProvider() else {
+          completion(NSError())
+          return
+      }
+
+      storeContentData(imageData, forChild: .profileImages) { imageUrl, error in
+        guard error == nil else {
+          completion(error)
+          return
+        }
+        
+        print("successfully get imageUrl", imageUrl ?? "")
+        completion(nil)
+      }
     }
   }
   

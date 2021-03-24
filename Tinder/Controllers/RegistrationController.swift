@@ -70,9 +70,16 @@ class RegistrationController: UIViewController {
     super.viewDidLoad()
     setupViews()
     setupViewModel()
-    addObservers()
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    addObservers()
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+  }
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     removeObservers()
@@ -125,6 +132,7 @@ class RegistrationController: UIViewController {
   
   private func setupViewModel() {
     registrationViewModel.bindableImage.bind { [unowned self] (image) in
+      self.selecPhotoButton.setTitle("", for: .normal)
       self.selecPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     registrationViewModel.bindableIsValid.bind { [unowned self] (isValid) in
@@ -137,7 +145,21 @@ class RegistrationController: UIViewController {
         self.registerButton.backgroundColor = .lightGray
       }
     }
+    registrationViewModel.bindableIsRegistering.bind { [unowned self] (isRegistering) in
+      guard let isRegistering = isRegistering else { return }
+      if isRegistering {
+        self.registerHud.show(in: self.view)
+      } else {
+        self.registerHud.dismiss()
+      }
+    }
   }
+  
+  var registerHud: JGProgressHUD = {
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Is Registering"
+    return hud
+  }()
   
   @objc func handleTap() {
     view.endEditing(true)
@@ -194,14 +216,8 @@ class RegistrationController: UIViewController {
   }
   
   @objc func handleRegister() {
-    self.handleTap()
-    TinderFirebaseService.createUser(
-      withEmail: emailTextField.text,
-      username: nameTextField.text,
-      password: passwordTextField.text,
-      profileImageDataProvider: {
-        nil
-    }) { (error) in
+    handleTap()
+    registrationViewModel.handleRegister { error in
       if let error = error {
         self.showHUDWithError(error)
         return

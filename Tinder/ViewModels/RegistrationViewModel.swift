@@ -12,6 +12,7 @@ class RegistrationViewModel {
   
   var bindableImage = Bindable<UIImage>()
   var bindableIsValid = Bindable<Bool>()
+  var bindableIsRegistering = Bindable<Bool>()
   
   var textInput: (name: String?, email: String?, password: String?) = ("", "", "") {
     didSet { checkIfTextInputValid() }
@@ -25,4 +26,17 @@ class RegistrationViewModel {
     bindableIsValid.value = isValid
   }
   
+  func handleRegister(completion: @escaping (Error?) -> Void) {
+    bindableIsRegistering.value = true
+    TinderFirebaseService.createUser(
+      withEmail: textInput.email,
+      username: textInput.name,
+      password: textInput.password,
+      profileImageDataProvider: {
+        self.bindableImage.value?.jpegData(compressionQuality: 0.75)
+    }) { (error) in
+      self.bindableIsRegistering.value = false
+      completion(error)
+    }
+  }
 }
