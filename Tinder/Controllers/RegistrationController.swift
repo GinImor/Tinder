@@ -7,19 +7,25 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 class RegistrationController: UIViewController {
 
+  var registrationViewModel = RegistrationViewModel()
+  
   var selectPhotoButtonWidth: NSLayoutConstraint?
   var selectPhotoButtonHeight: NSLayoutConstraint?
   
-  var selecPhotoButton: UIButton = {
+  lazy var selecPhotoButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Select Photo", for: .normal)
     button.setTitleColor(.black, for: .normal)
     button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
     button.backgroundColor = .white
     button.layer.cornerRadius = 16
+    button.imageView?.contentMode = .scaleAspectFill
+    button.clipsToBounds = true
+    button.addTarget(self, action: #selector(handleSelectPhoto), for: .touchUpInside)
     return button
   }()
   
@@ -50,7 +56,9 @@ class RegistrationController: UIViewController {
     button.setTitleColor(.white, for: .normal)
     button.setTitleColor(.darkGray, for: .disabled)
     button.backgroundColor = .lightGray
+    button.isEnabled = false
     button.layer.cornerRadius = 25
+    button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
     return button
   }()
   
@@ -61,6 +69,7 @@ class RegistrationController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     setupViews()
+    setupViewModel()
     addObservers()
   }
 
@@ -78,12 +87,10 @@ class RegistrationController: UIViewController {
     if traitCollection.verticalSizeClass == .compact {
       outterStackView.axis = .horizontal
       selectPhotoButtonHeight?.isActive = false
-      outterStackView.layoutIfNeeded()
       selectPhotoButtonWidth?.isActive = true
     } else {
       outterStackView.axis = .vertical
       selectPhotoButtonWidth?.isActive = false
-      outterStackView.layoutIfNeeded()
       selectPhotoButtonHeight?.isActive = true
     }
   }
@@ -103,6 +110,8 @@ class RegistrationController: UIViewController {
     
     selectPhotoButtonWidth = selecPhotoButton.widthAnchor.constraint(equalToConstant: 300)
     selectPhotoButtonHeight = selecPhotoButton.heightAnchor.constraint(equalToConstant: 274)
+    selectPhotoButtonWidth?.priority = UILayoutPriority(rawValue: 999)
+    selectPhotoButtonHeight?.priority = UILayoutPriority(rawValue: 999)
     
     let innerArrangedViews = [nameTextField, emailTextField, passwordTextField, registerButton]
     let innerStackView = UIStackView.verticalStack(arrangedSubviews: innerArrangedViews)
@@ -112,6 +121,22 @@ class RegistrationController: UIViewController {
     outterStackView.centerToSuperviewSafeAreaLayoutGuide(superview: view)
     outterStackView.pinToSuperviewSafeAreaHorizontalEdges(defaultSpacing: 45)
     setupOutterStackViewAxis()
+  }
+  
+  private func setupViewModel() {
+    registrationViewModel.bindableImage.bind { [unowned self] (image) in
+      self.selecPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+    }
+    registrationViewModel.bindableIsValid.bind { [unowned self] (isValid) in
+      guard let isValid = isValid else { return }
+      if isValid {
+        self.registerButton.isEnabled = true
+        self.registerButton.backgroundColor = #colorLiteral(red: 0.7855796218, green: 0.09417917579, blue: 0.2886558473, alpha: 1)
+      } else {
+        self.registerButton.isEnabled = false
+        self.registerButton.backgroundColor = .lightGray
+      }
+    }
   }
   
   @objc func handleTap() {
@@ -152,16 +177,45 @@ class RegistrationController: UIViewController {
     }
   }
   
-  @objc func editingDidChanged() {
-    if nameTextField.text?.isEmpty == false &&
-      emailTextField.text?.isEmpty == false &&
-      passwordTextField.text?.isEmpty == false {
-      registerButton.isEnabled = true
-      registerButton.backgroundColor = #colorLiteral(red: 0.7855796218, green: 0.09417917579, blue: 0.2886558473, alpha: 1)
+  @objc func editingDidChanged(_ textField: UITextField) {
+    if textField === nameTextField {
+      registrationViewModel.textInput.name = textField.text
+    } else if textField === emailTextField {
+      registrationViewModel.textInput.email = textField.text
     } else {
-      registerButton.isEnabled = false
-      registerButton.backgroundColor = .lightGray
+      registrationViewModel.textInput.password = textField.text
     }
+  }
+  
+  @objc func handleSelectPhoto() {
+    let imagePicker = UIImagePickerController()
+    imagePicker.delegate = self
+    present(imagePicker, animated: true)
+  }
+  
+  @objc func handleRegister() {
+    self.handleTap()
+    TinderFirebaseService.createUser(
+      withEmail: emailTextField.text,
+      username: nameTextField.text,
+      password: passwordTextField.text,
+      profileImageDataProvider: {
+        nil
+    }) { (error) in
+      if let error = error {
+        self.showHUDWithError(error)
+        return
+      }
+      print("successfully create user")
+    }
+  }
+  
+  private func showHUDWithError(_ error: Error) {
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Registration Error"
+    hud.detailTextLabel.text = error.localizedDescription
+    hud.show(in: view)
+    hud.dismiss(afterDelay: 4.0)
   }
   
   private func registrationTextField() -> CustomTextField {
@@ -171,5 +225,13 @@ class RegistrationController: UIViewController {
     textField.backgroundColor = .white
     textField.addTarget(self, action: #selector(editingDidChanged), for: .editingChanged)
     return textField
+  }
+}
+
+extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+  
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    registrationViewModel.bindableImage.value = info[.originalImage] as? UIImage
+    dismiss(animated: true)
   }
 }
