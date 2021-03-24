@@ -48,7 +48,8 @@ class RegistrationController: UIViewController {
     let button = UIButton(type: .system)
     button.setTitle("Register", for: .normal)
     button.setTitleColor(.white, for: .normal)
-    button.backgroundColor = #colorLiteral(red: 0.7855796218, green: 0.09417917579, blue: 0.2886558473, alpha: 1)
+    button.setTitleColor(.darkGray, for: .disabled)
+    button.backgroundColor = .lightGray
     button.layer.cornerRadius = 25
     return button
   }()
@@ -121,12 +122,12 @@ class RegistrationController: UIViewController {
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(handleKeyboardShow),
-      name: UIResponder.keyboardDidShowNotification,
+      name: UIResponder.keyboardWillShowNotification,
       object: nil)
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(handleKeyboardHide),
-      name: UIResponder.keyboardDidHideNotification,
+      name: UIResponder.keyboardWillHideNotification,
       object: nil)
   }
   
@@ -138,8 +139,6 @@ class RegistrationController: UIViewController {
     guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
     let frameEnd = value.cgRectValue
     let transitionY = frameEnd.minY - outterStackView.bounds.height/2 - outterStackView.center.y
-    print("value", frameEnd, outterStackView.bounds.height/2, outterStackView.center.y)
-    print("transitionY", transitionY)
     if transitionY < 0 {
       UIView.animate(withDuration: 0.5) {
         self.outterStackView.transform = CGAffineTransform(translationX: 0, y: transitionY)
@@ -153,11 +152,24 @@ class RegistrationController: UIViewController {
     }
   }
   
+  @objc func editingDidChanged() {
+    if nameTextField.text?.isEmpty == false &&
+      emailTextField.text?.isEmpty == false &&
+      passwordTextField.text?.isEmpty == false {
+      registerButton.isEnabled = true
+      registerButton.backgroundColor = #colorLiteral(red: 0.7855796218, green: 0.09417917579, blue: 0.2886558473, alpha: 1)
+    } else {
+      registerButton.isEnabled = false
+      registerButton.backgroundColor = .lightGray
+    }
+  }
+  
   private func registrationTextField() -> CustomTextField {
     let textField = CustomTextField()
     textField.paddingX = 16
     textField.layer.cornerRadius = 25
     textField.backgroundColor = .white
+    textField.addTarget(self, action: #selector(editingDidChanged), for: .editingChanged)
     return textField
   }
 }
