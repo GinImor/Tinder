@@ -16,7 +16,7 @@ class CustomTextField: UITextField {
     guard let paddingX = paddingX else { return super.textRect(forBounds: bounds) }
     return bounds.insetBy(dx: paddingX, dy: 0)
   }
-  
+
   override func editingRect(forBounds bounds: CGRect) -> CGRect {
     guard let paddingX = paddingX else { return super.editingRect(forBounds: bounds) }
     return bounds.insetBy(dx: paddingX, dy: 0)
