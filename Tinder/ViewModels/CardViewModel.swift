@@ -27,6 +27,8 @@ extension User: CardModel {
   }
   
   var textAlignment: NSTextAlignment { .left }
+  
+  var imageNames: [String] { [imageUrl1] }
 }
 
 extension Advertiser: CardModel {

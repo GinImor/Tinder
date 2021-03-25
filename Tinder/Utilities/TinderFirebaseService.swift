@@ -19,6 +19,7 @@ enum TinderFirebaseService {
   static var auth: Auth { Auth.auth() }
   static var currentUser: Firebase.User? { auth.currentUser }
   static var storage: StorageReference { Storage.storage().reference() }
+  static var firestore: Firestore { Firestore.firestore() }
   
   static func pathString(_ child: String, subChilds: [String]) -> String{
     var pathString = child
@@ -45,7 +46,7 @@ enum TinderFirebaseService {
     completion: @escaping (Error?) -> Void)
   {
     guard let email = email,
-//      let username = username,
+      let username = username,
       let password = password else {
         completion(NSError())
         return
@@ -56,7 +57,7 @@ enum TinderFirebaseService {
         completion(error)
         return
       }
-      guard let _ = authResult?.user.uid,
+      guard let uid = authResult?.user.uid,
         let imageData = profileImageDataProvider() else {
           completion(NSError())
           return
@@ -69,7 +70,14 @@ enum TinderFirebaseService {
         }
         
         print("successfully get imageUrl", imageUrl ?? "")
-        completion(nil)
+        storeMetaDataToFirestore(
+          path: firestore.collection("Users").document(uid),
+          dataProvider: {
+            ["imageUrl1": imageUrl!, "uid": uid, "name": username]
+        }) { error in
+          completion(error)
+        }
+        
       }
     }
   }
@@ -101,4 +109,38 @@ enum TinderFirebaseService {
       })
     }
   }
+  
+  static func storeMetaDataToFirestore(
+    path: DocumentReference,
+    dataProvider: () -> [String: Any]?,
+    completion: @escaping (Error?) -> Void
+  ) {
+    guard let dataBlock = dataProvider() else {
+       
+      completion(NSError())
+      return
+    }
+    path.setData(dataBlock) { (error) in
+      completion(error)
+    }
+  }
+  
+  static func fetchUserMetaData(
+    nextUserHandler: @escaping (User) -> Void,
+    completion: @escaping (Error?) -> Void
+  ) {
+    firestore.collection("Users").getDocuments { (snapshot, error) in
+      if let error = error {
+        completion(error)
+        return
+      }
+      
+      snapshot?.documents.forEach({ (docSnapshot) in
+        let user = User(userDic: docSnapshot.data())
+        nextUserHandler(user)
+      })
+      completion(nil)
+    }
+  }
+  
 }

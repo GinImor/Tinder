@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CardView: UIView {
   
@@ -31,6 +32,9 @@ class CardView: UIView {
   }
   
   private func setup() {
+    backgroundColor = .white
+    layer.cornerRadius = 8
+    layer.masksToBounds = true
     addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
     addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
   }
@@ -53,7 +57,7 @@ class CardView: UIView {
     
     self.imageNames = imageNames
     let firstImageName = imageNames[0]
-    imageView.image = UIImage(named: firstImageName)
+    imageView.sd_setImage(with: URL(string: firstImageName))
     
     guard imageNames.count > 1 else { return }
     barIndicators.isHidden = false
@@ -63,11 +67,6 @@ class CardView: UIView {
       barIndicators.addArrangedSubview(barIndicator)
     }
     barIndicators.arrangedSubviews[0].backgroundColor = .white
-  }
-  
-  func addCornerEffect() {
-    layer.cornerRadius = ceil(bounds.width * 0.05)
-    layer.masksToBounds = true
   }
   
   private func advanceImageIndex(byStep step: Int) -> Int {

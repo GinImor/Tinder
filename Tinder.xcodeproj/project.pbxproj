@@ -22,7 +22,7 @@
 		DC60C3902607864900D6052E /* HomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DC60C38F2607864900D6052E /* HomeView.xib */; };
 		DC67C623260B5460000E8402 /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC67C622260B5460000E8402 /* RegistrationViewModel.swift */; };
 		DC67C629260B54CB000E8402 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC67C628260B54CB000E8402 /* Bindable.swift */; };
-		DC67C62B260B55FD000E8402 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DC67C62A260B55FD000E8402 /* GoogleService-Info.plist */; };
+		DCA6B6B8260C2D8F0045C306 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DCA6B6B7260C2D8F0045C306 /* GoogleService-Info.plist */; };
 		DCBEEAEB2607684F00B71F16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEA2607684F00B71F16 /* AppDelegate.swift */; };
 		DCBEEAED2607684F00B71F16 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEC2607684F00B71F16 /* SceneDelegate.swift */; };
 		DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEE2607684F00B71F16 /* HomeController.swift */; };
@@ -49,7 +49,7 @@
 		DC60C38F2607864900D6052E /* HomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeView.xib; sourceTree = "<group>"; };
 		DC67C622260B5460000E8402 /* RegistrationViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
 		DC67C628260B54CB000E8402 /* Bindable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
-		DC67C62A260B55FD000E8402 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DCA6B6B7260C2D8F0045C306 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DCBEEAE72607684F00B71F16 /* Tinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCBEEAEA2607684F00B71F16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DCBEEAEC2607684F00B71F16 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -191,7 +191,7 @@
 				DC07706626088F940034C547 /* Extensions */,
 				DCBEEAFE260768C500B71F16 /* Supporting files */,
 				DCBEEAF82607685000B71F16 /* Info.plist */,
-				DC67C62A260B55FD000E8402 /* GoogleService-Info.plist */,
+				DCA6B6B7260C2D8F0045C306 /* GoogleService-Info.plist */,
 			);
 			path = Tinder;
 			sourceTree = "<group>";
@@ -278,8 +278,8 @@
 			files = (
 				DCBEEAF72607685000B71F16 /* LaunchScreen.storyboard in Resources */,
 				DCBEEAF42607685000B71F16 /* Assets.xcassets in Resources */,
-				DC67C62B260B55FD000E8402 /* GoogleService-Info.plist in Resources */,
 				DC1A0AF626088A7B002C7885 /* CardView.xib in Resources */,
+				DCA6B6B8260C2D8F0045C306 /* GoogleService-Info.plist in Resources */,
 				DC60C3902607864900D6052E /* HomeView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

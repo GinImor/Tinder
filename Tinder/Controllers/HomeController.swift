@@ -18,11 +18,7 @@ class HomeController: UIViewController {
 
   var cardViewModel = CardViewModel()
   
-  var modelTypes: [CardModel] = [
-    User(name: "Joey", age: 27, profession: "actor", imageNames: ["joey", "joey2"]),
-    Advertiser(title: "WWDC", brand: "Apple", posterImageName: "wwdc"),
-    User(name: "Ross", age: 28, profession: "professor", imageNames: ["ross", "ross2", "ross3"])
-  ]
+  var modelTypes: [CardModel] = []
   
   let containerView = UINib.viewWithName("HomeView") as! HomeView
   
@@ -30,15 +26,29 @@ class HomeController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     setupViews()
+    fetchUsers()
   }
-
+  
   private func setupViews() {
     view.backgroundColor = .systemBackground
     containerView.frame = view.bounds
     view.addSubview(containerView)
-    
     containerView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
-    
+  }
+  
+  private func fetchUsers() {
+    TinderFirebaseService.fetchUserMetaData(nextUserHandler: { (user) in
+      self.modelTypes.append(user)
+    }) { (error) in
+      guard error == nil else {
+        print("fetch users error: \(String(describing: error))")
+        return
+      }
+      self.setupCardDeckView()
+    }
+  }
+  
+  fileprivate func setupCardDeckView() {
     let cardDeckView = containerView.cardDeckView!
     // zPosition take effect when the views are in the same level
     cardDeckView.layer.zPosition = 10
@@ -55,8 +65,6 @@ class HomeController: UIViewController {
     let registration = RegistrationController()
     present(registration, animated: true)
   }
-  
-
   
 }
 

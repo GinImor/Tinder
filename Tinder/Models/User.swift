@@ -12,6 +12,13 @@ struct User {
   let name: String
   let age: Int
   let profession: String
-  let imageNames: [String]
+  let imageUrl1: String
+  
+  init(userDic: [String: Any]) {
+    self.name = userDic["name"] as? String ?? ""
+    self.age = userDic["age"] as? Int ?? 0
+    self.profession = userDic["profession"] as? String ?? ""
+    self.imageUrl1 = userDic["imageUrl1"] as? String ?? ""
+  }
 }
 

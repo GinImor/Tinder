@@ -21,16 +21,4 @@ class HomeView: UIView {
 
   @IBOutlet weak var cardDeckView: UIView!
 
-  
-  private var didAddCornerRadius = false
-  
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    if !didAddCornerRadius, let cardViews = cardDeckView.subviews as? [CardView] {
-      didAddCornerRadius = true
-      cardViews.forEach { (cardView) in
-        cardView.addCornerEffect()
-      }
-    }
-  }
 }

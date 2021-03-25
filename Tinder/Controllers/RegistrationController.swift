@@ -128,6 +128,11 @@ class RegistrationController: UIViewController {
     outterStackView.centerToSuperviewSafeAreaLayoutGuide(superview: view)
     outterStackView.pinToSuperviewSafeAreaHorizontalEdges(defaultSpacing: 45)
     setupOutterStackViewAxis()
+    
+    // for test
+    nameTextField.text = "Joey"
+    emailTextField.text = "Apple@gmail.com"
+    passwordTextField.text = "123456"
   }
   
   private func setupViewModel() {
