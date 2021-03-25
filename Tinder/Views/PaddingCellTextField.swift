@@ -1,5 +1,5 @@
 //
-//  CustomTextField.swift
+//  PaddingTextField.swift
 //  Tinder
 //
 //  Created by Gin Imor on 3/23/21.
@@ -8,17 +8,22 @@
 
 import UIKit
 
-class CustomTextField: UITextField {
+class PaddingTextField: UITextField {
   
-  var paddingX: CGFloat?
+  var paddingX: CGFloat = 8
 
   override func textRect(forBounds bounds: CGRect) -> CGRect {
-    guard let paddingX = paddingX else { return super.textRect(forBounds: bounds) }
     return bounds.insetBy(dx: paddingX, dy: 0)
   }
 
   override func editingRect(forBounds bounds: CGRect) -> CGRect {
-    guard let paddingX = paddingX else { return super.editingRect(forBounds: bounds) }
     return bounds.insetBy(dx: paddingX, dy: 0)
+  }
+}
+
+class PaddingCellTextField: PaddingTextField {
+  
+  override var intrinsicContentSize: CGSize {
+    CGSize(width: 0, height: 44)
   }
 }

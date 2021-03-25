@@ -29,21 +29,21 @@ class RegistrationController: UIViewController {
     return button
   }()
   
-  lazy var nameTextField: CustomTextField = {
+  lazy var nameTextField: PaddingTextField = {
     let textField = registrationTextField()
     textField.placeholder = "Enter Name"
     textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
     return textField
   }()
   
-  lazy var emailTextField: CustomTextField = {
+  lazy var emailTextField: PaddingTextField = {
     let textField = registrationTextField()
     textField.placeholder = "Enter Email"
     textField.keyboardType = .emailAddress
     return textField
   }()
   
-  lazy var passwordTextField: CustomTextField = {
+  lazy var passwordTextField: PaddingTextField = {
     let textField = registrationTextField()
     textField.placeholder = "Enter Password"
 //    textField.isSecureTextEntry = true
@@ -239,8 +239,8 @@ class RegistrationController: UIViewController {
     hud.dismiss(afterDelay: 4.0)
   }
   
-  private func registrationTextField() -> CustomTextField {
-    let textField = CustomTextField()
+  private func registrationTextField() -> PaddingTextField {
+    let textField = PaddingTextField()
     textField.paddingX = 16
     textField.layer.cornerRadius = 25
     textField.backgroundColor = .white
