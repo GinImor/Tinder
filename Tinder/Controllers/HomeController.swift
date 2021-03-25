@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 extension UINib {
   static func viewWithName(_ nibName: String) -> UIView {
@@ -21,6 +22,9 @@ class HomeController: UIViewController {
   var modelTypes: [CardModel] = []
   
   let containerView = UINib.viewWithName("HomeView") as! HomeView
+  var cardDeckView: UIView { containerView.cardDeckView! }
+  
+  var lastFetchedUser: User?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -34,30 +38,49 @@ class HomeController: UIViewController {
     containerView.frame = view.bounds
     view.addSubview(containerView)
     containerView.settingsButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+    containerView.didTapRefresh = {
+      self.handleRefresh()
+    }
+    // zPosition take effect when the views are in the same level
+    cardDeckView.layer.zPosition = 10
+  }
+  
+  private func handleRefresh() {
+    fetchUsers()
   }
   
   private func fetchUsers() {
-    TinderFirebaseService.fetchUserMetaData(nextUserHandler: { (user) in
-      self.modelTypes.append(user)
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Loading"
+    hud.show(in: view)
+    TinderFirebaseService.fetchUserMetaData(
+      startingUid: lastFetchedUser?.uid,
+      nextUserHandler: { (user) in
+        self.modelTypes.append(user)
+        self.lastFetchedUser = user
+        self.createCardViewWithModelType(user)
     }) { (error) in
+      hud.dismiss()
       guard error == nil else {
         print("fetch users error: \(String(describing: error))")
         return
       }
-      self.setupCardDeckView()
+      print("successfully fetched users")
     }
   }
   
-  fileprivate func setupCardDeckView() {
-    let cardDeckView = containerView.cardDeckView!
-    // zPosition take effect when the views are in the same level
-    cardDeckView.layer.zPosition = 10
+  fileprivate func createCardViewWithModelType(_ modelType: CardModel) {
+    let cardView = UINib.viewWithName("CardView") as! CardView
+    cardViewModel.setModel(modelType)
+    cardViewModel.configure(cardView)
+    cardDeckView.addSubview(cardView)
+    cardDeckView.sendSubviewToBack(cardView)
+    cardView.pinToSuperviewEdges()
+  }
+  
+  fileprivate func fillUpCardDeckView() {
     modelTypes.forEach { (modelType) in
-      let cardView = UINib.viewWithName("CardView") as! CardView
-      cardViewModel.setModel(modelType)
-      cardViewModel.configure(cardView)
-      cardDeckView.addSubview(cardView)
-      cardView.pinToSuperviewEdges()
+      createCardViewWithModelType(modelType)
     }
   }
   

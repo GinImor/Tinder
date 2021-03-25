@@ -83,7 +83,7 @@ class CardView: UIView {
       imageIndex = advanceImageIndex(byStep: -1)
     }
     barIndicators.arrangedSubviews[imageIndex].backgroundColor = .white
-    imageView.image = UIImage(named: imageNames[imageIndex])
+    imageView.sd_setImage(with: URL(string: imageNames[imageIndex]))
   }
   
   private func transform(for translation: CGPoint) -> CGAffineTransform {

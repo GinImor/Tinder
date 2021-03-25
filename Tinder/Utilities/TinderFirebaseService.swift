@@ -126,10 +126,13 @@ enum TinderFirebaseService {
   }
   
   static func fetchUserMetaData(
+    startingUid: String?,
     nextUserHandler: @escaping (User) -> Void,
     completion: @escaping (Error?) -> Void
   ) {
-    firestore.collection("Users").getDocuments { (snapshot, error) in
+    let query = firestore.collection("Users")
+      .order(by: "uid").start(after: [startingUid ?? ""]).limit(to: 2)
+    query.getDocuments { (snapshot, error) in
       if let error = error {
         completion(error)
         return

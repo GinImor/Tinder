@@ -9,6 +9,8 @@
 import UIKit
 
 class HomeView: UIView {
+  
+  var didTapRefresh: (() -> Void)?
 
   @IBOutlet weak var settingsButton: UIButton!
   
@@ -21,4 +23,7 @@ class HomeView: UIView {
 
   @IBOutlet weak var cardDeckView: UIView!
 
+  @IBAction func handleRefresh(_ sender: Any) {
+    didTapRefresh?()
+  }
 }
