@@ -146,4 +146,20 @@ enum TinderFirebaseService {
     }
   }
   
+  
+  static func fetchCurrentUser(completion: @escaping (User?, Error?) -> Void) {
+    guard let uid = currentUser?.uid else {
+      completion(nil, NSError())
+      return
+    }
+    
+    firestore.collection("Users").document("\(uid)").getDocument { (snapshot, error) in
+      guard let userDic = snapshot?.data() else {
+        completion(nil, error)
+        return
+      }
+      let user = User(userDic: userDic)
+      completion(user, error)
+    }
+  }
 }

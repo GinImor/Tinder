@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import JGProgressHUD
+import SDWebImage
 
 class SettingsController: UITableViewController {
   
@@ -36,6 +38,29 @@ class SettingsController: UITableViewController {
     super.viewDidLoad()
     setupNavigationBar()
     setupTableView()
+    fetchData()
+  }
+  
+  var user: User?
+  
+  private func fetchData() {
+    TinderFirebaseService.fetchCurrentUser { user, error in
+      if let error = error {
+        print("fetch current user error", error)
+        return
+      }
+      self.user = user
+      self.tableView.reloadData()
+      self.loadImages()
+    }
+  }
+  
+  private func loadImages() {
+    guard let imageUrlString = user?.imageUrl1, let imageUrl = URL(string: imageUrlString) else { return }
+    SDWebImageManager.shared.loadImage(with: imageUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+      guard let image = image else { return }
+      self.imageButton1.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+    }
   }
   
   private func setupNavigationBar() {
@@ -87,19 +112,28 @@ class SettingsController: UITableViewController {
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = SettingsCell(style: .default, reuseIdentifier: "tableViewCell")
     let placeholder: String
+    let text: String
     switch indexPath.section {
     case 1:
       placeholder = "Enter Name"
+      text = user?.name ?? ""
     case 2:
       placeholder = "Enter Profession"
+      text = user?.profession ?? ""
     case 3:
       placeholder = "Enter Age"
+      if let age = user?.age {
+        text = "\(age)"
+      } else { text = "" }
     case 4:
       placeholder = "Enter Bio"
+      text = ""
     default:
       placeholder = ""
+      text = ""
     }
     cell.textField.placeholder = placeholder
+    cell.textField.text = text
     return cell
   }
   

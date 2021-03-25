@@ -21,7 +21,8 @@ extension User: CardModel {
     let ageAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
     let prefessionAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .subheadline)]
     let result = NSMutableAttributedString(string: name, attributes: nameAttributes)
-    result.append(NSAttributedString(string: " \(age)\n", attributes: ageAttributes))
+    let ageString = age == nil ? "" : "  \(age!)\n"
+    result.append(NSAttributedString(string: ageString, attributes: ageAttributes))
     result.append(NSAttributedString(string: profession, attributes: prefessionAttributes))
     return result
   }
