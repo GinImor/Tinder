@@ -12,25 +12,29 @@ import SDWebImage
 
 class SettingsController: UITableViewController {
   
+  
   class leftShiftedLabel: UILabel {
     override func drawText(in rect: CGRect) {
       super.drawText(in: rect.inset(by: .init(top: 0, left: 8, bottom: 0, right: 0)))
     }
   }
   
-  lazy var imageButton1 = selecPhotoButton()
-  lazy var imageButton2 = selecPhotoButton()
-  lazy var imageButton3 = selecPhotoButton()
+  lazy var imageButtons: [UIButton] = [
+    selectPhotoButton(),
+    selectPhotoButton(),
+    selectPhotoButton()
+  ]
+  private var originalImages = [UIImage?](repeating: nil, count: 3)
   weak var lastTappedButton: UIButton?
   
   lazy var header: UIView = {
     let header = UIView()
-    let innerStackView = UIStackView.verticalStack(arrangedSubviews: [imageButton2, imageButton3])
+    let innerStackView = UIStackView.verticalStack(arrangedSubviews: [imageButtons[1], imageButtons[2]])
     innerStackView.distribution = .fillEqually
-    let outterStackView = UIStackView(arrangedSubviews: [imageButton1, innerStackView])
-    outterStackView.spacing = 8
-    outterStackView.pinToSuperviewEdges(edgeInsets: .init(padding: 8), pinnedView: header)
-    imageButton1.widthAnchor.constraint(equalTo: header.widthAnchor, multiplier: 0.45).isActive = true
+    let outerStackView = UIStackView(arrangedSubviews: [imageButtons[0], innerStackView])
+    outerStackView.spacing = 8
+    outerStackView.pinToSuperviewEdges(edgeInsets: .init(padding: 8), pinnedView: header)
+    imageButtons[0].widthAnchor.constraint(equalTo: header.widthAnchor, multiplier: 0.45).isActive = true
     return header
   }()
   
@@ -56,10 +60,18 @@ class SettingsController: UITableViewController {
   }
   
   private func loadImages() {
-    guard let imageUrlString = user?.imageUrl1, let imageUrl = URL(string: imageUrlString) else { return }
-    SDWebImageManager.shared.loadImage(with: imageUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
-      guard let image = image else { return }
-      self.imageButton1.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+    guard let user = self.user else { return }
+    for i in 0..<user.imageUrls.count {
+      if let imageUrlString = user.imageUrls[i], let imageUrl = URL(string: imageUrlString) {
+        SDWebImageManager.shared.loadImage(with: imageUrl, options: .continueInBackground, progress: nil)
+        { (image, _, _, _, _, _) in
+          guard let image = image else {
+            return
+          }
+          self.imageButtons[i].setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+          self.originalImages[i] = self.imageButtons[i].image(for: .normal)
+        }
+      }
     }
   }
   
@@ -117,14 +129,17 @@ class SettingsController: UITableViewController {
     case 1:
       placeholder = "Enter Name"
       text = user?.name ?? ""
+      cell.textField.addTarget(self, action: #selector(didEditedName), for: .editingChanged)
     case 2:
       placeholder = "Enter Profession"
       text = user?.profession ?? ""
+      cell.textField.addTarget(self, action: #selector(didEditedProfession), for: .editingChanged)
     case 3:
       placeholder = "Enter Age"
       if let age = user?.age {
         text = "\(age)"
       } else { text = "" }
+      cell.textField.addTarget(self, action: #selector(didEditedAge), for: .editingChanged)
     case 4:
       placeholder = "Enter Bio"
       text = ""
@@ -137,7 +152,19 @@ class SettingsController: UITableViewController {
     return cell
   }
   
-  func selecPhotoButton() -> UIButton {
+  @objc func didEditedName(_ textField: UITextField) {
+    user?.name = textField.text ?? ""
+  }
+  
+  @objc func didEditedProfession(_ textField: UITextField) {
+    user?.profession = textField.text ?? ""
+  }
+  
+  @objc func didEditedAge(_ textField: UITextField) {
+    user?.age = Int(textField.text ?? "")
+  }
+  
+  func selectPhotoButton() -> UIButton {
     let button = UIButton(type: .system)
     button.backgroundColor = .white
     button.setTitle("Select Photo", for: .normal)
@@ -153,11 +180,33 @@ class SettingsController: UITableViewController {
   }
   
   @objc func handleLogout() {
-    
+  
   }
   
   @objc func handleSave() {
-    
+    guard let user = self.user else { return }
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Uploading"
+    hud.show(in: view)
+    let imageUrls = user.imageUrls
+    var imageData = [Data?](repeating: nil, count: 3)
+    for i in 0..<imageUrls.count {
+      if let buttonImage = imageButtons[i].image(for: .normal) {
+        if let originalImage = originalImages[i], buttonImage.isEqual(originalImage) {
+          continue
+        }
+        imageData[i] = buttonImage.jpegData(compressionQuality: 0.8)
+        print("image button \(i)'s image change")
+      }
+    }
+    TinderFirebaseService.storeImages(imagesDataProvider: { imageData }, for: user,
+      initialImageUrls: imageUrls) { error in
+      hud.dismiss()
+      guard error == nil else {
+        print("error occur when store images: \(String(describing: error))")
+        return
+      }
+    }
   }
   
   @objc func handleSelectPhoto(_ button: UIButton) {
@@ -170,7 +219,8 @@ class SettingsController: UITableViewController {
 
 extension SettingsController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
   
-  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info:
+    [UIImagePickerController.InfoKey : Any]) {
     let image = info[.originalImage] as? UIImage
     lastTappedButton?.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
     dismiss(animated: true)

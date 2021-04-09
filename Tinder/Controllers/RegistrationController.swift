@@ -16,7 +16,7 @@ class RegistrationController: UIViewController {
   var selectPhotoButtonWidth: NSLayoutConstraint?
   var selectPhotoButtonHeight: NSLayoutConstraint?
   
-  lazy var selecPhotoButton: UIButton = {
+  lazy var selectPhotoButton: UIButton = {
     let button = UIButton(type: .system)
     button.setTitle("Select Photo", for: .normal)
     button.setTitleColor(.black, for: .normal)
@@ -62,7 +62,7 @@ class RegistrationController: UIViewController {
     return button
   }()
   
-  var outterStackView: UIStackView!
+  var outerStackView: UIStackView!
   
   let gradientLayer = CAGradientLayer()
   
@@ -90,20 +90,20 @@ class RegistrationController: UIViewController {
     gradientLayer.frame = view.bounds
   }
   
-  fileprivate func setupOutterStackViewAxis() {
+  fileprivate func setupOuterStackViewAxis() {
     if traitCollection.verticalSizeClass == .compact {
-      outterStackView.axis = .horizontal
+      outerStackView.axis = .horizontal
       selectPhotoButtonHeight?.isActive = false
       selectPhotoButtonWidth?.isActive = true
     } else {
-      outterStackView.axis = .vertical
+      outerStackView.axis = .vertical
       selectPhotoButtonWidth?.isActive = false
       selectPhotoButtonHeight?.isActive = true
     }
   }
   
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    setupOutterStackViewAxis()
+    setupOuterStackViewAxis()
   }
   
   private func setupViews() {
@@ -115,8 +115,8 @@ class RegistrationController: UIViewController {
     gradientLayer.frame = view.bounds
     view.layer.addSublayer(gradientLayer)
     
-    selectPhotoButtonWidth = selecPhotoButton.widthAnchor.constraint(equalToConstant: 300)
-    selectPhotoButtonHeight = selecPhotoButton.heightAnchor.constraint(equalToConstant: 274)
+    selectPhotoButtonWidth = selectPhotoButton.widthAnchor.constraint(equalToConstant: 300)
+    selectPhotoButtonHeight = selectPhotoButton.heightAnchor.constraint(equalToConstant: 274)
     selectPhotoButtonWidth?.priority = UILayoutPriority(rawValue: 999)
     selectPhotoButtonHeight?.priority = UILayoutPriority(rawValue: 999)
     
@@ -124,10 +124,10 @@ class RegistrationController: UIViewController {
     let innerStackView = UIStackView.verticalStack(arrangedSubviews: innerArrangedViews)
     innerStackView.distribution = .fillEqually
     
-    outterStackView = UIStackView.verticalStack(arrangedSubviews: [selecPhotoButton, innerStackView])
-    outterStackView.centerToSuperviewSafeAreaLayoutGuide(superview: view)
-    outterStackView.pinToSuperviewSafeAreaHorizontalEdges(defaultSpacing: 45)
-    setupOutterStackViewAxis()
+    outerStackView = UIStackView.verticalStack(arrangedSubviews: [selectPhotoButton, innerStackView])
+    outerStackView.centerToSuperviewSafeAreaLayoutGuide(superview: view)
+    outerStackView.pinToSuperviewSafeAreaHorizontalEdges(defaultSpacing: 45)
+    setupOuterStackViewAxis()
     
     // for test
     nameTextField.text = "Joey"
@@ -137,8 +137,8 @@ class RegistrationController: UIViewController {
   
   private func setupViewModel() {
     registrationViewModel.bindableImage.bind { [unowned self] (image) in
-      self.selecPhotoButton.setTitle("", for: .normal)
-      self.selecPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+      self.selectPhotoButton.setTitle("", for: .normal)
+      self.selectPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     registrationViewModel.bindableIsValid.bind { [unowned self] (isValid) in
       guard let isValid = isValid else { return }
@@ -190,17 +190,17 @@ class RegistrationController: UIViewController {
   @objc func handleKeyboardShow(_ notification: Notification) {
     guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
     let frameEnd = value.cgRectValue
-    let transitionY = frameEnd.minY - outterStackView.bounds.height/2 - outterStackView.center.y
+    let transitionY = frameEnd.minY - outerStackView.bounds.height/2 - outerStackView.center.y
     if transitionY < 0 {
       UIView.animate(withDuration: 0.5) {
-        self.outterStackView.transform = CGAffineTransform(translationX: 0, y: transitionY)
+        self.outerStackView.transform = CGAffineTransform(translationX: 0, y: transitionY)
       }
     }
   }
   
   @objc func handleKeyboardHide() {
     UIView.animate(withDuration: 0.5) {
-        self.outterStackView.transform = .identity
+        self.outerStackView.transform = .identity
     }
   }
   

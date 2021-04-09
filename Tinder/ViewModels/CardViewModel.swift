@@ -19,17 +19,18 @@ extension User: CardModel {
   var attributedString: NSAttributedString {
     let nameAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)]
     let ageAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .body)]
-    let prefessionAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .subheadline)]
-    let result = NSMutableAttributedString(string: name, attributes: nameAttributes)
+    let professionAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .subheadline)]
     let ageString = age == nil ? "" : "  \(age!)\n"
+    let professionString = "\(profession ?? "")"
+    let result = NSMutableAttributedString(string: name, attributes: nameAttributes)
     result.append(NSAttributedString(string: ageString, attributes: ageAttributes))
-    result.append(NSAttributedString(string: profession, attributes: prefessionAttributes))
+    result.append(NSAttributedString(string: professionString, attributes: professionAttributes))
     return result
   }
   
   var textAlignment: NSTextAlignment { .left }
   
-  var imageNames: [String] { [imageUrl1] }
+  var imageNames: [String] { imageUrls.compactMap { $0 } }
 }
 
 extension Advertiser: CardModel {

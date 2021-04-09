@@ -113,24 +113,15 @@ class CardView: UIView {
       let finalY = finalX * ratio
       let finalPoint = CGPoint( x: finalX, y: finalY)
       
-      UIView.animate(
-        withDuration: 0.5,
-        delay: 0.0,
-        options: .curveEaseIn,
-        animations: {
+      UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
           self.transform = self.transform(for: finalPoint)
       }) { (_) in
         self.transform = .identity
         self.removeFromSuperview()
       }
     } else {
-      UIView.animate(
-        withDuration: 0.5,
-        delay: 0.0,
-        usingSpringWithDamping: 0.4,
-        initialSpringVelocity: 0.1,
-        options: [],
-        animations: {
+      UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.1, options:
+      [], animations: {
           self.transform = .identity
       },
         completion: nil

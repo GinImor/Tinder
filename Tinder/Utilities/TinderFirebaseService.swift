@@ -21,17 +21,19 @@ enum TinderFirebaseService {
   static var storage: StorageReference { Storage.storage().reference() }
   static var firestore: Firestore { Firestore.firestore() }
   
-  static func pathString(_ child: String, subChilds: [String]) -> String{
+  private static var dispatchGroup = DispatchGroup()
+  
+  static func pathString(_ child: String, subChildren: [String]) -> String{
     var pathString = child
-    let subPathString = subChilds.joined(separator: "/")
+    let subPathString = subChildren.joined(separator: "/")
     if subPathString != "" {
       pathString += "/\(subPathString)"
     }
     return pathString
   }
   
-  static func pathForSTOChild(_ child: StorageChild, subChilds: String...) -> StorageReference {
-    return storage.child(pathString(child.rawValue, subChilds: subChilds))
+  static func pathForSTOChild(_ child: StorageChild, subChildren: String...) -> StorageReference {
+    return storage.child(pathString(child.rawValue, subChildren: subChildren))
   }
   
   static func configure() {
@@ -88,7 +90,7 @@ enum TinderFirebaseService {
     completion: @escaping (String?, Error?) -> Void)
   {
     let fileName = NSUUID().uuidString
-    let ref = pathForSTOChild(child, subChilds: fileName)
+    let ref = pathForSTOChild(child, subChildren: fileName)
     ref.putData(contentData, metadata: nil) { (_, error) in
       if let error = error {
         print("put data error: \(error)")
@@ -110,13 +112,40 @@ enum TinderFirebaseService {
     }
   }
   
+  static func storeImages(
+    imagesDataProvider: () -> [Data?],
+    for user: User,
+    initialImageUrls: [String?],
+    completion: @escaping (Error?) -> Void) {
+    let imagesData = imagesDataProvider()
+    var imageUrls = initialImageUrls
+    for i in 0..<imagesData.count {
+      guard let imageData = imagesData[i] else { continue }
+      dispatchGroup.enter()
+      storeContentData(imageData, forChild: .profileImages
+      ) { imageUrl, error in
+        defer { dispatchGroup.leave() }
+        imageUrls[i] = imageUrl
+        print("successfully upload image\(i)")
+      }
+    }
+    dispatchGroup.notify(queue: .main) {
+      print("successfully update image urls")
+      var newUser = user
+      newUser.imageUrls = imageUrls
+      storeCurrentUserToFirestore(user: newUser
+      ) { error in
+        completion(error)
+      }
+    }
+  }
+  
   static func storeMetaDataToFirestore(
     path: DocumentReference,
     dataProvider: () -> [String: Any]?,
     completion: @escaping (Error?) -> Void
   ) {
     guard let dataBlock = dataProvider() else {
-       
       completion(NSError())
       return
     }
@@ -146,20 +175,47 @@ enum TinderFirebaseService {
     }
   }
   
+  static var currentUserFirestoreReference: DocumentReference? {
+    guard let uid = currentUser?.uid else { return nil }
+    return firestore.collection("Users").document("\(uid)")
+  }
   
   static func fetchCurrentUser(completion: @escaping (User?, Error?) -> Void) {
-    guard let uid = currentUser?.uid else {
+    guard let ref = currentUserFirestoreReference else {
       completion(nil, NSError())
       return
     }
-    
-    firestore.collection("Users").document("\(uid)").getDocument { (snapshot, error) in
+    ref.getDocument { (snapshot, error) in
       guard let userDic = snapshot?.data() else {
         completion(nil, error)
         return
       }
       let user = User(userDic: userDic)
       completion(user, error)
+    }
+  }
+  
+  
+  static func storeCurrentUserToFirestore(
+    user: User,
+    completion: @escaping (Error?) -> Void) {
+    guard let ref = currentUserFirestoreReference else {
+      completion(NSError())
+      return
+    }
+    var userData: [String: Any] = [
+      "uid": user.uid,
+      "name": user.name,
+    ]
+    if let age = user.age { userData["age"] = age }
+    if let profession = user.profession { userData["profession"] = profession }
+    for i in 0..<user.imageUrls.count {
+      guard let imageUrl = user.imageUrls[i] else { continue }
+      userData["imageUrl\(i)"] = imageUrl
+    }
+    
+    ref.setData(userData) { (error) in
+      completion(error)
     }
   }
 }
