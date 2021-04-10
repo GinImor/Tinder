@@ -206,6 +206,8 @@ enum TinderFirebaseService {
     var userData: [String: Any] = [
       "uid": user.uid,
       "name": user.name,
+      "minSeekingAge": user.minSeekingAge,
+      "maxSeekingAge": user.maxSeekingAge
     ]
     if let age = user.age { userData["age"] = age }
     if let profession = user.profession { userData["profession"] = profession }

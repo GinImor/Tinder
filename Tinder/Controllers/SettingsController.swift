@@ -26,6 +26,7 @@ class SettingsController: UITableViewController {
   ]
   private var originalImages = [UIImage?](repeating: nil, count: 3)
   weak var lastTappedButton: UIButton?
+  var ageRangeCell: AgeRangeCell?
   
   lazy var header: UIView = {
     let header = UIView()
@@ -104,6 +105,8 @@ class SettingsController: UITableViewController {
       header.text = "Age"
     case 4:
       header.text = "Bio"
+    case 5:
+      header.text = "Seeking Age Range"
     default: ()
     }
     return header
@@ -114,7 +117,7 @@ class SettingsController: UITableViewController {
     return 40
   }
   
-  override func numberOfSections(in tableView: UITableView) -> Int { 5 }
+  override func numberOfSections(in tableView: UITableView) -> Int { 6 }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if section == 0 { return 0 }
@@ -122,6 +125,14 @@ class SettingsController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if indexPath.section == 5 {
+      let cell = AgeRangeCell(style: .default, reuseIdentifier: "ageRangeCell")
+      cell.setSeekingAgeForUser(user)
+      cell.minAgeDidChange = { [unowned self] minAge in  self.user?.minSeekingAge = minAge }
+      cell.maxAgeDidChange = { [unowned self] maxAge in self.user?.maxSeekingAge = maxAge }
+      return cell
+    }
+    
     let cell = SettingsCell(style: .default, reuseIdentifier: "tableViewCell")
     let placeholder: String
     let text: String
@@ -184,7 +195,7 @@ class SettingsController: UITableViewController {
   }
   
   @objc func handleSave() {
-    guard let user = self.user else { return }
+    guard var user = self.user else { return }
     let hud = JGProgressHUD(style: .dark)
     hud.textLabel.text = "Uploading"
     hud.show(in: view)

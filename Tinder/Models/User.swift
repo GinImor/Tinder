@@ -15,10 +15,15 @@ struct User {
   var profession: String?
   var imageUrls: [String?] = [nil, nil, nil]
   
+  var minSeekingAge: Int
+  var maxSeekingAge: Int
+  
   init(userDic: [String: Any]) {
     self.uid = userDic["uid"] as? String ?? ""
     self.name = userDic["name"] as? String ?? ""
     self.age = userDic["age"] as? Int
+    self.minSeekingAge = userDic["minSeekingAge"] as? Int ?? 0
+    self.maxSeekingAge = userDic["maxSeekingAge"] as? Int ?? 100
     self.profession = userDic["profession"] as? String
     for i in 0..<imageUrls.count {
       imageUrls[i] = userDic["imageUrl\(i)"] as? String
