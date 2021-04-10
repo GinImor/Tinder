@@ -10,6 +10,10 @@ import UIKit
 import JGProgressHUD
 import SDWebImage
 
+protocol SettingsControllerDelegate: class {
+  var user: User? {get set}
+}
+
 class SettingsController: UITableViewController {
   
   
@@ -18,6 +22,8 @@ class SettingsController: UITableViewController {
       super.drawText(in: rect.inset(by: .init(top: 0, left: 8, bottom: 0, right: 0)))
     }
   }
+  
+  weak var delegate: SettingsControllerDelegate?
   
   lazy var imageButtons: [UIButton] = [
     selectPhotoButton(),
@@ -195,7 +201,7 @@ class SettingsController: UITableViewController {
   }
   
   @objc func handleSave() {
-    guard var user = self.user else { return }
+    guard let user = self.user else { return }
     let hud = JGProgressHUD(style: .dark)
     hud.textLabel.text = "Uploading"
     hud.show(in: view)
@@ -211,12 +217,14 @@ class SettingsController: UITableViewController {
       }
     }
     TinderFirebaseService.storeImages(imagesDataProvider: { imageData }, for: user,
-      initialImageUrls: imageUrls) { error in
+      initialImageUrls: imageUrls) {newUser, error in
       hud.dismiss()
       guard error == nil else {
         print("error occur when store images: \(String(describing: error))")
         return
       }
+      self.delegate?.user = newUser
+      self.dismiss(animated: true)
     }
   }
   

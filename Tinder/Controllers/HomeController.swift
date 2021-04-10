@@ -26,11 +26,37 @@ class HomeController: UIViewController {
   
   var lastFetchedUser: User?
   
+  var user: User? {
+    didSet {
+      guard let user = user else { return }
+      if hud.isHidden {
+        hud.show(in: view)
+        cardDeckView.subviews.forEach { $0.removeFromSuperview() }
+      }
+      TinderFirebaseService.fetchUsersBetweenAgeRange(
+        minAge: user.minSeekingAge,
+        maxAge: user.maxSeekingAge,
+        nextUserHandler: { user in
+          self.modelTypes.append(user)
+          self.createCardViewWithModelType(user)
+        }) { (error) in
+        self.hud.dismiss()
+        guard error == nil else {
+          print("fetch users error: \(String(describing: error))")
+          return
+        }
+        print("successfully fetched users")
+      }
+      
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     setupViews()
-    fetchUsers()
+//    fetchUsers()
+    fetchQualifiedUsers()
   }
   
   private func setupViews() {
@@ -49,9 +75,13 @@ class HomeController: UIViewController {
     fetchUsers()
   }
   
-  private func fetchUsers() {
+  let hud: JGProgressHUD = {
     let hud = JGProgressHUD(style: .dark)
-    hud.textLabel.text = "Loading"
+    hud.textLabel.text = "Loading..."
+    return hud
+  }()
+  
+  private func fetchUsers() {
     hud.show(in: view)
     TinderFirebaseService.fetchUserMetaData(
       startingUid: lastFetchedUser?.uid,
@@ -59,13 +89,25 @@ class HomeController: UIViewController {
         self.modelTypes.append(user)
         self.lastFetchedUser = user
         self.createCardViewWithModelType(user)
-    }) { (error) in
-      hud.dismiss()
+      }) { (error) in
+      self.hud.dismiss()
       guard error == nil else {
         print("fetch users error: \(String(describing: error))")
         return
       }
       print("successfully fetched users")
+    }
+  }
+  
+  private func fetchQualifiedUsers() {
+    hud.show(in: view)
+    cardDeckView.subviews.forEach { $0.removeFromSuperview() }
+    TinderFirebaseService.fetchCurrentUser { user, error in
+      if let error = error {
+        print("fetch current user error:", error)
+        return
+      }
+      self.user = user
     }
   }
   
@@ -85,10 +127,12 @@ class HomeController: UIViewController {
   }
   
   @objc func handleSettings() {
-    let registration = SettingsController()
-    let nav = UINavigationController(rootViewController: registration)
+    let settings = SettingsController()
+    settings.delegate = self
+    let nav = UINavigationController(rootViewController: settings)
     present(nav, animated: true)
   }
   
 }
 
+extension HomeController: SettingsControllerDelegate {}

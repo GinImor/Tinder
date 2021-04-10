@@ -116,7 +116,7 @@ enum TinderFirebaseService {
     imagesDataProvider: () -> [Data?],
     for user: User,
     initialImageUrls: [String?],
-    completion: @escaping (Error?) -> Void) {
+    completion: @escaping (User?, Error?) -> Void) {
     let imagesData = imagesDataProvider()
     var imageUrls = initialImageUrls
     for i in 0..<imagesData.count {
@@ -135,7 +135,7 @@ enum TinderFirebaseService {
       newUser.imageUrls = imageUrls
       storeCurrentUserToFirestore(user: newUser
       ) { error in
-        completion(error)
+        completion(newUser, error)
       }
     }
   }
@@ -161,23 +161,41 @@ enum TinderFirebaseService {
   ) {
     let query = firestore.collection("Users")
       .order(by: "uid").start(after: [startingUid ?? ""]).limit(to: 2)
+    fetchUsers(query: query, nextUserHandler: nextUserHandler, completion: completion)
+  }
+  
+  static func fetchUsersBetweenAgeRange(
+    minAge: Int,
+    maxAge: Int,
+    nextUserHandler: @escaping (User) -> Void,
+    completion: @escaping (Error?) -> Void) {
+    let query = firestore.collection("Users")
+      .whereField("age", isGreaterThanOrEqualTo: minAge)
+      .whereField("age", isLessThanOrEqualTo: maxAge)
+    fetchUsers(query: query, nextUserHandler: nextUserHandler, completion: completion)
+  }
+  
+  static var currentUserFirestoreReference: DocumentReference? {
+    guard let uid = currentUser?.uid else { return nil }
+    return firestore.collection("Users").document("\(uid)")
+  }
+  
+  private static func fetchUsers(
+    query: Query,
+    nextUserHandler: @escaping (User) -> Void,
+    completion: @escaping (Error?) -> Void) {
     query.getDocuments { (snapshot, error) in
       if let error = error {
         completion(error)
         return
       }
-      
+    
       snapshot?.documents.forEach({ (docSnapshot) in
         let user = User(userDic: docSnapshot.data())
         nextUserHandler(user)
       })
       completion(nil)
     }
-  }
-  
-  static var currentUserFirestoreReference: DocumentReference? {
-    guard let uid = currentUser?.uid else { return nil }
-    return firestore.collection("Users").document("\(uid)")
   }
   
   static func fetchCurrentUser(completion: @escaping (User?, Error?) -> Void) {
