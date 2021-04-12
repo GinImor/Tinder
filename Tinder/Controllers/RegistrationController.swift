@@ -9,8 +9,8 @@
 import UIKit
 import JGProgressHUD
 
-class RegistrationController: UIViewController {
-
+class RegistrationController: LoginRegisterController {
+  
   var registrationViewModel = RegistrationViewModel()
   
   var selectPhotoButtonWidth: NSLayoutConstraint?
@@ -29,49 +29,32 @@ class RegistrationController: UIViewController {
     return button
   }()
   
-  lazy var nameTextField: PaddingTextField = {
-    let textField = registrationTextField()
-    textField.placeholder = "Enter Name"
-    textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    return textField
-  }()
+  lazy var nameTextField: PaddingTextField = newNameTextField()
+  lazy var emailTextField: PaddingTextField = newEmailTextField()
+  lazy var passwordTextField: PaddingTextField = newPasswordTextField()
   
-  lazy var emailTextField: PaddingTextField = {
-    let textField = registrationTextField()
-    textField.placeholder = "Enter Email"
-    textField.keyboardType = .emailAddress
-    return textField
-  }()
-  
-  lazy var passwordTextField: PaddingTextField = {
-    let textField = registrationTextField()
-    textField.placeholder = "Enter Password"
-//    textField.isSecureTextEntry = true
-    return textField
-  }()
-  
-  var registerButton: UIButton = {
-    let button = UIButton(type: .system)
+  lazy var registerButton: UIButton = {
+    let button = self.newLoginRegisterButton()
     button.setTitle("Register", for: .normal)
-    button.setTitleColor(.white, for: .normal)
-    button.setTitleColor(.darkGray, for: .disabled)
-    button.backgroundColor = .lightGray
-    button.isEnabled = false
-    button.layer.cornerRadius = 25
     button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
     return button
   }()
   
+  lazy var goToLoginButton: UIButton = self.newNavigationButton()
+  
   var outerStackView: UIStackView!
   
-  let gradientLayer = CAGradientLayer()
+  var registerHud: JGProgressHUD = {
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Is Registering"
+    return hud
+  }()
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupViews()
     setupViewModel()
   }
-
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     addObservers()
@@ -79,17 +62,9 @@ class RegistrationController: UIViewController {
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-  }
-  override func viewDidDisappear(_ animated: Bool) {
-    super.viewDidDisappear(animated)
     removeObservers()
   }
-  
-  override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-    gradientLayer.frame = view.bounds
-  }
-  
+ 
   fileprivate func setupOuterStackViewAxis() {
     if traitCollection.verticalSizeClass == .compact {
       outerStackView.axis = .horizontal
@@ -106,14 +81,10 @@ class RegistrationController: UIViewController {
     setupOuterStackViewAxis()
   }
   
-  private func setupViews() {
-    view.backgroundColor = .white
-    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+  override func setupViews() {
+    super.setupViews()
     
-    gradientLayer.colors = [#colorLiteral(red: 0.9778892398, green: 0.3299795985, blue: 0.3270179033, alpha: 1).cgColor, #colorLiteral(red: 0.8706625104, green: 0.1032681242, blue: 0.4151168168, alpha: 1).cgColor]
-    gradientLayer.locations = [0.0, 1.0]
-    gradientLayer.frame = view.bounds
-    view.layer.addSublayer(gradientLayer)
+    navigationController?.isNavigationBarHidden = true
     
     selectPhotoButtonWidth = selectPhotoButton.widthAnchor.constraint(equalToConstant: 300)
     selectPhotoButtonHeight = selectPhotoButton.heightAnchor.constraint(equalToConstant: 274)
@@ -128,6 +99,9 @@ class RegistrationController: UIViewController {
     outerStackView.centerToSuperviewSafeAreaLayoutGuide(superview: view)
     outerStackView.pinToSuperviewSafeAreaHorizontalEdges(defaultSpacing: 45)
     setupOuterStackViewAxis()
+  
+    goToLoginButton.setTitle("go to login", for: .normal)
+    goToLoginButton.addTarget(self, action: #selector(goToLogin), for: .touchUpInside)
     
     // for test
     nameTextField.text = "Joey"
@@ -141,33 +115,18 @@ class RegistrationController: UIViewController {
       self.selectPhotoButton.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
     }
     registrationViewModel.bindableIsValid.bind { [unowned self] (isValid) in
-      guard let isValid = isValid else { return }
-      if isValid {
-        self.registerButton.isEnabled = true
-        self.registerButton.backgroundColor = #colorLiteral(red: 0.7855796218, green: 0.09417917579, blue: 0.2886558473, alpha: 1)
-      } else {
-        self.registerButton.isEnabled = false
-        self.registerButton.backgroundColor = .lightGray
-      }
+      self.enableLoginRegisterButton(self.registerButton, enabling: isValid)
     }
     registrationViewModel.bindableIsRegistering.bind { [unowned self] (isRegistering) in
-      guard let isRegistering = isRegistering else { return }
+      guard let isRegistering = isRegistering else {
+        return
+      }
       if isRegistering {
         self.registerHud.show(in: self.view)
       } else {
         self.registerHud.dismiss()
       }
     }
-  }
-  
-  var registerHud: JGProgressHUD = {
-    let hud = JGProgressHUD(style: .dark)
-    hud.textLabel.text = "Is Registering"
-    return hud
-  }()
-  
-  @objc func handleTap() {
-    view.endEditing(true)
   }
   
   private func addObservers() {
@@ -188,9 +147,11 @@ class RegistrationController: UIViewController {
   }
   
   @objc func handleKeyboardShow(_ notification: Notification) {
-    guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+    guard let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+      return
+    }
     let frameEnd = value.cgRectValue
-    let transitionY = frameEnd.minY - outerStackView.bounds.height/2 - outerStackView.center.y
+    let transitionY = frameEnd.minY - outerStackView.bounds.height / 2 - outerStackView.center.y
     if transitionY < 0 {
       UIView.animate(withDuration: 0.5) {
         self.outerStackView.transform = CGAffineTransform(translationX: 0, y: transitionY)
@@ -200,11 +161,11 @@ class RegistrationController: UIViewController {
   
   @objc func handleKeyboardHide() {
     UIView.animate(withDuration: 0.5) {
-        self.outerStackView.transform = .identity
+      self.outerStackView.transform = .identity
     }
   }
   
-  @objc func editingDidChanged(_ textField: UITextField) {
+  override func editingDidChanged(_ textField: UITextField) {
     if textField === nameTextField {
       registrationViewModel.textInput.name = textField.text
     } else if textField === emailTextField {
@@ -222,31 +183,22 @@ class RegistrationController: UIViewController {
   
   @objc func handleRegister() {
     handleTap()
-    registrationViewModel.handleRegister { error in
+    registrationViewModel.handleRegister { [weak self] error in
       if let error = error {
-        self.showHUDWithError(error)
+        self?.showHUDWithError(error, message: "Registration Error")
         return
       }
       print("successfully create user")
+      self?.delegate?.didFinishedLoggingIn()
     }
   }
   
-  private func showHUDWithError(_ error: Error) {
-    let hud = JGProgressHUD(style: .dark)
-    hud.textLabel.text = "Registration Error"
-    hud.detailTextLabel.text = error.localizedDescription
-    hud.show(in: view)
-    hud.dismiss(afterDelay: 4.0)
+  @objc func goToLogin() {
+    let loginController = LoginController()
+    loginController.delegate = delegate
+    navigationController?.pushViewController(loginController, animated: true)
   }
-  
-  private func registrationTextField() -> PaddingTextField {
-    let textField = PaddingTextField()
-    textField.paddingX = 16
-    textField.layer.cornerRadius = 25
-    textField.backgroundColor = .white
-    textField.addTarget(self, action: #selector(editingDidChanged), for: .editingChanged)
-    return textField
-  }
+
 }
 
 extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {

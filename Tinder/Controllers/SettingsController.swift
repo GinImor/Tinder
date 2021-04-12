@@ -197,7 +197,8 @@ class SettingsController: UITableViewController {
   }
   
   @objc func handleLogout() {
-  
+    TinderFirebaseService.logout()
+    dismiss(animated: true)
   }
   
   @objc func handleSave() {

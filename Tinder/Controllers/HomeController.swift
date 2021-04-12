@@ -51,12 +51,27 @@ class HomeController: UIViewController {
     }
   }
   
+  let hud: JGProgressHUD = {
+    let hud = JGProgressHUD(style: .dark)
+    hud.textLabel.text = "Loading..."
+    return hud
+  }()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     setupViews()
-//    fetchUsers()
     fetchQualifiedUsers()
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    if !TinderFirebaseService.hasCurrentUser {
+      let registration = RegistrationController()
+      registration.delegate = self
+      let nav = UINavigationController(rootViewController: registration)
+      present(nav, animated: true)
+    }
   }
   
   private func setupViews() {
@@ -74,12 +89,6 @@ class HomeController: UIViewController {
   private func handleRefresh() {
     fetchUsers()
   }
-  
-  let hud: JGProgressHUD = {
-    let hud = JGProgressHUD(style: .dark)
-    hud.textLabel.text = "Loading..."
-    return hud
-  }()
   
   private func fetchUsers() {
     hud.show(in: view)
@@ -104,6 +113,7 @@ class HomeController: UIViewController {
     cardDeckView.subviews.forEach { $0.removeFromSuperview() }
     TinderFirebaseService.fetchCurrentUser { user, error in
       if let error = error {
+        self.hud.dismiss()
         print("fetch current user error:", error)
         return
       }
@@ -136,3 +146,10 @@ class HomeController: UIViewController {
 }
 
 extension HomeController: SettingsControllerDelegate {}
+
+extension HomeController: LoginRegisterControllerDelegate {
+  func didFinishedLoggingIn() {
+    dismiss(animated: true)
+    fetchQualifiedUsers()
+  }
+}

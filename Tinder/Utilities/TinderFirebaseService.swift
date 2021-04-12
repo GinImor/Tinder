@@ -23,6 +23,8 @@ enum TinderFirebaseService {
   
   private static var dispatchGroup = DispatchGroup()
   
+  static var hasCurrentUser: Bool { currentUser != nil }
+  
   static func pathString(_ child: String, subChildren: [String]) -> String{
     var pathString = child
     let subPathString = subChildren.joined(separator: "/")
@@ -40,6 +42,20 @@ enum TinderFirebaseService {
     FirebaseApp.configure()
   }
   
+  static func login(
+    withEmail email: String,
+    password: String,
+    completion: @escaping (Error?) -> Void)
+  {
+    auth.signIn(withEmail: email, password: password, completion: { dataResult, error in
+      completion(error)
+    })
+  }
+  
+  static func logout() {
+    try? auth.signOut()
+  }
+  
   static func createUser(
     withEmail email: String?,
     username: String?,
@@ -50,10 +66,10 @@ enum TinderFirebaseService {
     guard let email = email,
       let username = username,
       let password = password else {
-        completion(NSError())
+        completion(NSError(domain: "", code: 1, userInfo: nil))
         return
     }
-    Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+    auth.createUser(withEmail: email, password: password) { (authResult, error) in
       guard error == nil else {
         print("create user error: \(String(describing: error))")
         completion(error)
@@ -61,7 +77,7 @@ enum TinderFirebaseService {
       }
       guard let uid = authResult?.user.uid,
         let imageData = profileImageDataProvider() else {
-          completion(NSError())
+          completion(NSError(domain: "", code: 1, userInfo: nil))
           return
       }
 
@@ -104,7 +120,7 @@ enum TinderFirebaseService {
         }
         
         guard let imageUrl = url?.absoluteString else {
-          completion(nil, NSError())
+          completion(nil, NSError(domain: "", code: 1, userInfo: nil))
           return
         }
         completion(imageUrl, nil)
@@ -146,7 +162,7 @@ enum TinderFirebaseService {
     completion: @escaping (Error?) -> Void
   ) {
     guard let dataBlock = dataProvider() else {
-      completion(NSError())
+      completion(NSError(domain: "", code: 1, userInfo: nil))
       return
     }
     path.setData(dataBlock) { (error) in
@@ -200,7 +216,7 @@ enum TinderFirebaseService {
   
   static func fetchCurrentUser(completion: @escaping (User?, Error?) -> Void) {
     guard let ref = currentUserFirestoreReference else {
-      completion(nil, NSError())
+      completion(nil, NSError(domain: "", code: 1, userInfo: nil))
       return
     }
     ref.getDocument { (snapshot, error) in
@@ -218,7 +234,7 @@ enum TinderFirebaseService {
     user: User,
     completion: @escaping (Error?) -> Void) {
     guard let ref = currentUserFirestoreReference else {
-      completion(NSError())
+      completion(NSError(domain: "", code: 1, userInfo: nil))
       return
     }
     var userData: [String: Any] = [
