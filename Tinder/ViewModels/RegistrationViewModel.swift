@@ -32,10 +32,10 @@ class RegistrationViewModel {
       withEmail: textInput.email,
       username: textInput.name,
       password: textInput.password,
-      profileImageDataProvider: {
-        self.bindableImage.value?.jpegData(compressionQuality: 0.75)
-    }) { (error) in
-      self.bindableIsRegistering.value = false
+      profileImageDataProvider: { [weak self] in
+        self?.bindableImage.value?.jpegData(compressionQuality: 0.75)
+    }) { [weak self] (error) in
+      self?.bindableIsRegistering.value = false
       completion(error)
     }
   }

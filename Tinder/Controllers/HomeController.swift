@@ -36,11 +36,11 @@ class HomeController: UIViewController {
       TinderFirebaseService.fetchUsersBetweenAgeRange(
         minAge: user.minSeekingAge,
         maxAge: user.maxSeekingAge,
-        nextUserHandler: { user in
-          self.modelTypes.append(user)
-          self.createCardViewWithModelType(user)
-        }) { (error) in
-        self.hud.dismiss()
+        nextUserHandler: { [weak self] user in
+          self?.modelTypes.append(user)
+          self?.createCardViewWithModelType(user)
+        }) { [weak self] (error) in
+        self?.hud.dismiss()
         guard error == nil else {
           print("fetch users error: \(String(describing: error))")
           return
@@ -94,12 +94,12 @@ class HomeController: UIViewController {
     hud.show(in: view)
     TinderFirebaseService.fetchUserMetaData(
       startingUid: lastFetchedUser?.uid,
-      nextUserHandler: { (user) in
-        self.modelTypes.append(user)
-        self.lastFetchedUser = user
-        self.createCardViewWithModelType(user)
-      }) { (error) in
-      self.hud.dismiss()
+      nextUserHandler: { [weak self] (user) in
+        self?.modelTypes.append(user)
+        self?.lastFetchedUser = user
+        self?.createCardViewWithModelType(user)
+      }) { [weak self] (error) in
+      self?.hud.dismiss()
       guard error == nil else {
         print("fetch users error: \(String(describing: error))")
         return
@@ -111,13 +111,13 @@ class HomeController: UIViewController {
   private func fetchQualifiedUsers() {
     hud.show(in: view)
     cardDeckView.subviews.forEach { $0.removeFromSuperview() }
-    TinderFirebaseService.fetchCurrentUser { user, error in
+    TinderFirebaseService.fetchCurrentUser { [weak self] user, error in
       if let error = error {
-        self.hud.dismiss()
+        self?.hud.dismiss()
         print("fetch current user error:", error)
         return
       }
-      self.user = user
+      self?.user = user
     }
   }
   

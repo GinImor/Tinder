@@ -55,14 +55,14 @@ class SettingsController: UITableViewController {
   var user: User?
   
   private func fetchData() {
-    TinderFirebaseService.fetchCurrentUser { user, error in
+    TinderFirebaseService.fetchCurrentUser { [weak self] user, error in
       if let error = error {
         print("fetch current user error", error)
         return
       }
-      self.user = user
-      self.tableView.reloadData()
-      self.loadImages()
+      self?.user = user
+      self?.tableView.reloadData()
+      self?.loadImages()
     }
   }
   
@@ -218,14 +218,14 @@ class SettingsController: UITableViewController {
       }
     }
     TinderFirebaseService.storeImages(imagesDataProvider: { imageData }, for: user,
-      initialImageUrls: imageUrls) {newUser, error in
+      initialImageUrls: imageUrls) { [weak self] newUser, error in
       hud.dismiss()
       guard error == nil else {
         print("error occur when store images: \(String(describing: error))")
         return
       }
-      self.delegate?.user = newUser
-      self.dismiss(animated: true)
+      self?.delegate?.user = newUser
+      self?.dismiss(animated: true)
     }
   }
   
