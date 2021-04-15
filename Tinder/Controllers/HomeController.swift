@@ -17,8 +17,6 @@ extension UINib {
 
 class HomeController: UIViewController {
 
-  var cardViewModel = CardViewModel()
-  
   var modelTypes: [CardModel] = []
   
   let containerView = UINib.viewWithName("HomeView") as! HomeView
@@ -123,8 +121,9 @@ class HomeController: UIViewController {
   
   fileprivate func createCardViewWithModelType(_ modelType: CardModel) {
     let cardView = UINib.viewWithName("CardView") as! CardView
-    cardViewModel.setModel(modelType)
-    cardViewModel.configure(cardView)
+    let cardViewModel = CardViewModel(cardModel: modelType)
+    cardView.cardViewModel = cardViewModel
+    cardView.delegate = self
     cardDeckView.addSubview(cardView)
     cardDeckView.sendSubviewToBack(cardView)
     cardView.pinToSuperviewEdges()
@@ -151,5 +150,15 @@ extension HomeController: LoginRegisterControllerDelegate {
   func didFinishedLoggingIn() {
     dismiss(animated: true)
     fetchQualifiedUsers()
+  }
+}
+
+extension HomeController: CardViewDelegate {
+  func didTappedDetailButton(_ model: CardViewModel) {
+    let userDetailsController = UserDetailsController()
+    userDetailsController.modalPresentationStyle = .fullScreen
+    model.switchScenario()
+    userDetailsController.cardViewModel = model
+    present(userDetailsController, animated: true)
   }
 }

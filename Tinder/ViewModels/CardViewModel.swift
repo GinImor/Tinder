@@ -11,7 +11,7 @@ import UIKit
 protocol CardModel {
   var attributedString: NSAttributedString { get }
   var textAlignment: NSTextAlignment { get }
-  var imageNames: [String] { get }
+  var validImageUrls: [String] { get }
 }
 
 extension User: CardModel {
@@ -30,7 +30,7 @@ extension User: CardModel {
   
   var textAlignment: NSTextAlignment { .left }
   
-  var imageNames: [String] { imageUrls.compactMap { $0 } }
+  var validImageUrls: [String] { imageUrls.compactMap { $0 } }
 }
 
 extension Advertiser: CardModel {
@@ -45,22 +45,91 @@ extension Advertiser: CardModel {
   
   var textAlignment: NSTextAlignment { .center }
   
-  var imageNames: [String] { [posterImageName] }
+  var validImageUrls: [String] { [posterImageName] }
 }
 
 class CardViewModel {
   
-  var cardModel: CardModel?
-  
-  func setModel(_ cardModel: CardModel) {
-    self.cardModel = cardModel
+  func configureBarIndicators(_ indicators: UIStackView!) {
+    indicators.isHidden = true
+    guard urlsCount > 1 else { return }
+    indicators.isHidden = false
+    (0..<urlsCount).forEach { (_) in
+      let barIndicator = UIView()
+      barIndicator.backgroundColor = barDefaultColor
+      indicators.addArrangedSubview(barIndicator)
+    }
+    indicators.arrangedSubviews[0].backgroundColor = .white
   }
   
-  func configure(_ cardView: CardView) {
-    guard let cardModel = self.cardModel else { return }
-    cardView.informationLabel.attributedText = cardModel.attributedString
-    cardView.informationLabel.textAlignment = cardModel.textAlignment
-    cardView.setImageNames(cardModel.imageNames)
+  private var cardModel: CardModel
+  private(set) var imageUrls: [String] = []
+  
+  private(set) var currentImageIndex: Int {
+    get { isHome ? homeCardIndex : detailCardIndex }
+    set {
+      if isHome { homeCardIndex = newValue }
+      else { detailCardIndex = newValue }
+    }
+  }
+  
+  private var barDefaultColor = UIColor(white: 0.0, alpha: 0.1)
+  
+  func enableCurrentBarIndicator(_ indicators: UIStackView!) {
+    indicators.arrangedSubviews[currentImageIndex].backgroundColor = .white
+  }
+  
+  func disableCurrentBarIndicator(_ indicators: UIStackView!) {
+    indicators.arrangedSubviews[currentImageIndex].backgroundColor = barDefaultColor
+  }
+  
+  private var homeCardIndex = 0
+  private var detailCardIndex = 0
+  private(set) var isHome = true
+  
+  var attributedString: NSAttributedString {
+    cardModel.attributedString
+  }
+  
+  var textAlignment: NSTextAlignment {
+    cardModel.textAlignment
+  }
+  
+  var firstImageUrl: String? {
+    imageUrls.first
+  }
+  
+  var currentImageUrl: String? {
+    urlsCount > 0 ? imageUrls[currentImageIndex] : nil
+  }
+  
+  var urlsCount: Int {
+    imageUrls.count
+  }
+  
+  init(cardModel: CardModel) {
+    self.cardModel = cardModel
+    imageUrls = cardModel.validImageUrls
+  }
+  
+  func switchScenario() {
+    isHome.toggle()
+  }
+  
+  @discardableResult
+  func nextCard(toRight: Bool) -> Int? {
+    guard urlsCount > 0 else { return nil }
+    let originalIndex = currentImageIndex
+    advanceImageIndex(byStep: toRight ? 1 : -1)
+    return originalIndex == currentImageIndex ? nil : currentImageIndex
+  }
+  
+  private func advanceImageIndex(byStep step: Int) {
+    if isHome {
+      currentImageIndex = ((currentImageIndex + step) % urlsCount + urlsCount) % urlsCount
+    } else {
+      currentImageIndex = max(0, min(urlsCount - 1, currentImageIndex + step))
+    }
   }
   
 }

@@ -9,23 +9,47 @@
 import UIKit
 import SDWebImage
 
+protocol CardViewDelegate: class {
+  func didTappedDetailButton(_: CardViewModel)
+}
+
 class CardView: UIView {
   
   let gradientLayer = CAGradientLayer()
-  var imageNames: [String] = []
-  
-  @IBOutlet weak var imageView: UIImageView!
-  
-  @IBOutlet weak var informationLabel: UILabel!  {
+    
+  @IBOutlet weak var informationContainerView: UIView! {
     didSet {
       gradientLayer.colors = [UIColor.clear, .black].map { $0.cgColor }
-      gradientLayer.locations = [0.0, 3.0]
-      layer.insertSublayer(gradientLayer, below: informationLabel.layer)
+      gradientLayer.locations = [0.0, 1.3]
+      layer.insertSublayer(gradientLayer, below: informationContainerView.layer)
     }
   }
   
-  @IBOutlet weak var barIndicators: UIStackView!
+  @IBOutlet weak var informationLabel: UILabel!
   
+  weak var delegate: CardViewDelegate?
+  
+  public var cardViewModel: CardViewModel? {
+    didSet {
+      guard let cardViewModel = cardViewModel else { return }
+      swipingPhotosController.cardViewModel = cardViewModel
+      informationLabel.attributedText = cardViewModel.attributedString
+      informationLabel.textAlignment = cardViewModel.textAlignment
+    }
+  }
+  
+  private let swipingPhotosController = SwipingPhotosController(transitionStyle: .scroll, navigationOrientation:
+  .horizontal)
+  
+  private var swipingView: UIView {
+    swipingPhotosController.view
+  }
+  
+  @IBAction func didTappedDetailButton(_ sender: Any) {
+    guard let viewModel = cardViewModel else { return }
+    delegate?.didTappedDetailButton(viewModel)
+  }
+    
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     setup()
@@ -36,55 +60,32 @@ class CardView: UIView {
     layer.cornerRadius = 8
     layer.masksToBounds = true
     addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
-    addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+    swipingView.pinToSuperviewEdges(pinnedView: self)
+    self.sendSubviewToBack(swipingView)
   }
   
   override func layoutSubviews() {
     super.layoutSubviews()
     gradientLayer.frame = CGRect(
-      x: informationLabel.frame.minX - 8,
-      y: informationLabel.frame.minY,
-      width: informationLabel.frame.width + 16,
-      height: informationLabel.frame.height + 8
+      x: informationContainerView.frame.minX - 8,
+      y: informationContainerView.frame.minY,
+      width: informationContainerView.frame.width + 16,
+      height: informationContainerView.frame.height + 8
     )
   }
   
-  private var barDefaultColor = UIColor(white: 0.0, alpha: 0.1)
-  private var imageIndex = 0
-  
-  func setImageNames(_ imageNames: [String]) {
-    guard !imageNames.isEmpty else { return }
-    
-    self.imageNames = imageNames
-    let firstImageName = imageNames[0]
-    imageView.sd_setImage(with: URL(string: firstImageName))
-    
-    guard imageNames.count > 1 else { return }
-    barIndicators.isHidden = false
-    (0..<imageNames.count).forEach { (_) in
-      let barIndicator = UIView()
-      barIndicator.backgroundColor = barDefaultColor
-      barIndicators.addArrangedSubview(barIndicator)
-    }
-    barIndicators.arrangedSubviews[0].backgroundColor = .white
-  }
-  
-  private func advanceImageIndex(byStep step: Int) -> Int {
-    ((imageIndex + step) % imageNames.count + imageNames.count) % imageNames.count
-  }
-  
-  @objc func handleTap(_ tap: UITapGestureRecognizer) {
-    guard !barIndicators.isHidden else { return }
-    barIndicators.arrangedSubviews[imageIndex].backgroundColor = barDefaultColor
-    let location = tap.location(in: self)
-    if location.x > bounds.width / 2 {
-      imageIndex = advanceImageIndex(byStep: 1)
-    } else {
-      imageIndex = advanceImageIndex(byStep: -1)
-    }
-    barIndicators.arrangedSubviews[imageIndex].backgroundColor = .white
-    imageView.sd_setImage(with: URL(string: imageNames[imageIndex]))
-  }
+//  @objc func handleTap(_ tap: UITapGestureRecognizer) {
+//    guard !barIndicators.isHidden, let viewModel = cardViewModel else { return }
+//    viewModel.disableCurrentBarIndicator(barIndicators)
+//    let location = tap.location(in: self)
+//    let nextImageUrl: String
+//    if location.x > bounds.width / 2 {
+//      nextImageUrl = viewModel.nextImage(toRight: true)!
+//    } else {
+//      nextImageUrl = viewModel.nextImage(toRight: false)!
+//    }
+//    viewModel.enableCurrentBarIndicator(barIndicators)
+//  }
   
   private func transform(for translation: CGPoint) -> CGAffineTransform {
     let moveBy = CGAffineTransform(translationX: translation.x, y: translation.y)

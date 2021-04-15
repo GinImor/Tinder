@@ -208,7 +208,9 @@ enum TinderFirebaseService {
     
       snapshot?.documents.forEach({ (docSnapshot) in
         let user = User(userDic: docSnapshot.data())
-        nextUserHandler(user)
+        if user.uid != currentUser?.uid {
+          nextUserHandler(user)
+        }
       })
       completion(nil)
     }
