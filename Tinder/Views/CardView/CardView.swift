@@ -11,7 +11,7 @@ import SDWebImage
 
 protocol CardViewDelegate: class {
   func didTappedDetailButton(_: CardViewModel)
-  func willRemoveCard(_: CardView)
+  func willSwipeCard(_: CardView, toRight: Bool)
 }
 
 class CardView: UIView {
@@ -46,6 +46,8 @@ class CardView: UIView {
     swipingPhotosController.view
   }
   
+  public var uid: String { cardViewModel?.uid ?? "" }
+  
   @IBAction func didTappedDetailButton(_ sender: Any) {
     guard let viewModel = cardViewModel else { return }
     delegate?.didTappedDetailButton(viewModel)
@@ -62,7 +64,7 @@ class CardView: UIView {
     layer.masksToBounds = true
     addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:))))
     swipingView.pinToSuperviewEdges(pinnedView: self)
-    self.sendSubviewToBack(swipingView)
+    sendSubviewToBack(swipingView)
   }
   
   override func layoutSubviews() {
@@ -118,7 +120,7 @@ class CardView: UIView {
       let finalX = frame.width * 2.0 * (translation.x > 0 ? 1 : -1)
       let finalY = finalX * ratio
       let finalPoint = CGPoint( x: finalX, y: finalY)
-      delegate?.willRemoveCard(self)
+      delegate?.willSwipeCard(self, toRight: translation.x > 0)
       UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
           self.transform = self.transform(for: finalPoint)
       }) { (_) in

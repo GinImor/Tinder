@@ -9,6 +9,7 @@
 import UIKit
 
 protocol CardModel {
+  var uid: String { get }
   var attributedString: NSAttributedString { get }
   var textAlignment: NSTextAlignment { get }
   var validImageUrls: [String] { get }
@@ -35,6 +36,8 @@ extension User: CardModel {
 
 extension Advertiser: CardModel {
   
+  var uid: String { "" }
+  
   var attributedString: NSAttributedString {
     let titleAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 28, weight: .black)]
     let brandAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .heavy)]
@@ -49,6 +52,8 @@ extension Advertiser: CardModel {
 }
 
 class CardViewModel {
+  
+  public var uid: String { cardModel.uid }
   
   func configureBarIndicators(_ indicators: UIStackView!) {
     indicators.isHidden = true

@@ -128,6 +128,57 @@ enum TinderFirebaseService {
     }
   }
   
+  static func likeUserWithUid(_ uid: String, like: Bool, completion: @escaping (Error?) -> Void) {
+    guard let currentUserUid = currentUser?.uid else {
+      completion(NSError(domain: "", code: 3, userInfo: nil))
+      return
+    }
+    let path = firestore.collection("Swipes").document(currentUserUid)
+    path.getDocument { snapshot, error in
+      guard let snapshot = snapshot, error == nil else {
+        completion(error)
+        return
+      }
+      let data = [uid: like]
+      if snapshot.exists {
+        path.updateData(data) { error in
+          checkMatchUser(currentUid: currentUserUid, like: like, likingUid: uid, updatingLikeError: error,
+            completion: completion)
+        }
+      } else {
+        path.setData(data) { error in
+          checkMatchUser(currentUid: currentUserUid, like: like, likingUid: uid, updatingLikeError: error,
+            completion: completion)
+        }
+      }
+    }
+  }
+  
+  private static func checkMatchUser(currentUid: String, like: Bool, likingUid: String, updatingLikeError: Error?,
+                                     completion: @escaping (Error?) -> ()) {
+    guard updatingLikeError == nil else {
+      completion(updatingLikeError)
+      return
+    }
+    guard like else {
+      completion(nil)
+      return
+    }
+    let path = firestore.collection("Swipes").document(likingUid)
+    path.getDocument { snapshot, error in
+      guard error == nil else {
+        completion(error)
+        return
+      }
+      guard let dataBlock = snapshot?.data(), (dataBlock[currentUid] as? Bool) == true else {
+        completion(nil)
+        return
+      }
+      print("find a match!")
+      completion(nil)
+    }
+  }
+  
   static func storeImages(
     imagesDataProvider: () -> [Data?],
     for user: User,
@@ -178,6 +229,21 @@ enum TinderFirebaseService {
     let query = firestore.collection("Users")
       .order(by: "uid").start(after: [startingUid ?? ""]).limit(to: 2)
     fetchUsers(query: query, nextUserHandler: nextUserHandler, completion: completion)
+  }
+  
+  static func fetchSwipedUsers(completion: @escaping ([String: Bool]?, Error?) -> Void) {
+    guard let currentUid = currentUser?.uid else {
+      completion(nil, NSError(domain: "", code: 3, userInfo: nil))
+      return
+    }
+    let path = firestore.collection("Swipes").document(currentUid)
+    path.getDocument { snapshot, error in
+      guard error == nil else {
+        completion(nil, error)
+        return
+      }
+      completion(snapshot?.data() as? [String: Bool], nil)
+    }
   }
   
   static func fetchUsersBetweenAgeRange(

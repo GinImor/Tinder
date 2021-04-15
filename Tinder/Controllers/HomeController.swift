@@ -32,28 +32,42 @@ class HomeController: UIViewController {
         hud.show(in: view)
         cardDeckView.subviews.forEach { $0.removeFromSuperview() }
       }
-      TinderFirebaseService.fetchUsersBetweenAgeRange(
-        minAge: user.minSeekingAge,
-        maxAge: user.maxSeekingAge,
-        nextUserHandler: { [weak self] user in
-          self?.modelTypes.append(user)
-          self?.createCardViewWithModelType(user)
-        }) { [weak self] (error) in
-        self?.hud.dismiss()
+      TinderFirebaseService.fetchSwipedUsers() { [weak self] swipedUsers, error in
         guard error == nil else {
-          print("fetch users error: \(String(describing: error))")
+          print("fetch swiped users error", error!)
           return
         }
-        print("successfully fetched users")
+        self?.swipedUsers = swipedUsers!
+        TinderFirebaseService.fetchUsersBetweenAgeRange(
+          minAge: user.minSeekingAge,
+          maxAge: user.maxSeekingAge,
+          nextUserHandler: { [weak self] user in
+            guard let strongSelf = self, strongSelf.swipedUsers[user.uid] == nil else { return }
+            strongSelf.modelTypes.append(user)
+            strongSelf.createCardViewWithModelType(user)
+          }) { [weak self] (error) in
+          self?.hud.dismiss()
+          guard error == nil else {
+            print("fetch users error: \(String(describing: error))")
+            return
+          }
+          print("successfully fetched users")
+        }
       }
     }
   }
+  
+  private var swipedUsers: [String: Bool] = [:]
   
   let hud: JGProgressHUD = {
     let hud = JGProgressHUD(style: .dark)
     hud.textLabel.text = "Loading..."
     return hud
   }()
+  
+  private var lastCard: CardView? {
+    lastCardIndex < 0 ? nil : cardDeckView.subviews[lastCardIndex] as? CardView
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -99,16 +113,25 @@ class HomeController: UIViewController {
   }
   
   private func swipeCardToRight(_ right: Bool) {
-    if lastCardIndex > -1 && lastCardIndex < cardDeckView.subviews.count {
-      let currentCard = cardDeckView.subviews[lastCardIndex] as! CardView
-      lastCardIndex -= 1
-      UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.6
-        , initialSpringVelocity: 0.0, options: [], animations: {
-        currentCard.swipeToRight(right)
-      }, completion: { (_) in
-        currentCard.transform = .identity
-        currentCard.removeFromSuperview()
-      })
+    guard let lastCard = lastCard else { return }
+    uploadLikingStatusForCard(card: lastCard, like: right)
+    lastCardIndex -= 1
+    UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.6
+      , initialSpringVelocity: 0.0, options: [], animations: {
+      lastCard.swipeToRight(right)
+    }, completion: { (_) in
+      lastCard.transform = .identity
+      lastCard.removeFromSuperview()
+    })
+  }
+  
+  private func uploadLikingStatusForCard(card: CardView, like: Bool) {
+    TinderFirebaseService.likeUserWithUid(card.uid, like: like) { error in
+      if let error = error {
+        print("liking user error", error)
+        return
+      }
+      print("successfully like user")
     }
   }
   
@@ -191,7 +214,8 @@ extension HomeController: CardViewDelegate {
     present(userDetailsController, animated: true)
   }
   
-  func willRemoveCard(_ view: CardView) {
+  func willSwipeCard(_ view: CardView, toRight: Bool) {
+    uploadLikingStatusForCard(card: view, like: toRight)
     lastCardIndex -= 1
   }
 }
