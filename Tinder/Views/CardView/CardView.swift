@@ -11,6 +11,7 @@ import SDWebImage
 
 protocol CardViewDelegate: class {
   func didTappedDetailButton(_: CardViewModel)
+  func willRemoveCard(_: CardView)
 }
 
 class CardView: UIView {
@@ -93,6 +94,10 @@ class CardView: UIView {
     return moveBy.rotated(by: rotation)
   }
   
+  func swipeToRight(_ right: Bool) {
+    transform = transform(for: CGPoint(x: frame.width * 2.0 * (right ? 1 : -1), y: 0.0))
+  }
+  
   @objc func handlePan(_ pan: UIPanGestureRecognizer) {
     switch pan.state {
     case .changed:
@@ -113,7 +118,7 @@ class CardView: UIView {
       let finalX = frame.width * 2.0 * (translation.x > 0 ? 1 : -1)
       let finalY = finalX * ratio
       let finalPoint = CGPoint( x: finalX, y: finalY)
-      
+      delegate?.willRemoveCard(self)
       UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
           self.transform = self.transform(for: finalPoint)
       }) { (_) in

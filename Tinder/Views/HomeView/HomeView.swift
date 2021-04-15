@@ -11,7 +11,9 @@ import UIKit
 class HomeView: UIView {
   
   var didTapRefresh: (() -> Void)?
-
+  var didTapLike: (() -> Void)?
+  var didTapDislike: (() -> Void)?
+  
   @IBOutlet weak var settingsButton: UIButton!
   
   @IBOutlet weak var topStackView: UIStackView! {
@@ -22,8 +24,15 @@ class HomeView: UIView {
   }
 
   @IBOutlet weak var cardDeckView: UIView!
-
+  
   @IBAction func handleRefresh(_ sender: Any) {
     didTapRefresh?()
+  }
+  
+  @IBAction func handleLike(_ sender: Any) {
+    didTapLike?()
+  }
+  @IBAction func handleDislike(_ sender: Any) {
+    didTapDislike?()
   }
 }

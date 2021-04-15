@@ -23,6 +23,7 @@ class HomeController: UIViewController {
   var cardDeckView: UIView { containerView.cardDeckView! }
   
   var lastFetchedUser: User?
+  var lastCardIndex = -1
   
   var user: User? {
     didSet {
@@ -45,7 +46,6 @@ class HomeController: UIViewController {
         }
         print("successfully fetched users")
       }
-      
     }
   }
   
@@ -80,8 +80,36 @@ class HomeController: UIViewController {
     containerView.didTapRefresh = {
       self.handleRefresh()
     }
+    containerView.didTapLike = {
+      self.handleLike()
+    }
+    containerView.didTapDislike = {
+      self.handleDislike()
+    }
     // zPosition take effect when the views are in the same level
     cardDeckView.layer.zPosition = 10
+  }
+  
+  private func handleDislike() {
+    swipeCardToRight(false)
+  }
+  
+  private func handleLike() {
+    swipeCardToRight(true)
+  }
+  
+  private func swipeCardToRight(_ right: Bool) {
+    if lastCardIndex > -1 && lastCardIndex < cardDeckView.subviews.count {
+      let currentCard = cardDeckView.subviews[lastCardIndex] as! CardView
+      lastCardIndex -= 1
+      UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.6
+        , initialSpringVelocity: 0.0, options: [], animations: {
+        currentCard.swipeToRight(right)
+      }, completion: { (_) in
+        currentCard.transform = .identity
+        currentCard.removeFromSuperview()
+      })
+    }
   }
   
   private func handleRefresh() {
@@ -126,6 +154,7 @@ class HomeController: UIViewController {
     cardView.delegate = self
     cardDeckView.addSubview(cardView)
     cardDeckView.sendSubviewToBack(cardView)
+    lastCardIndex += 1
     cardView.pinToSuperviewEdges()
   }
   
@@ -160,5 +189,9 @@ extension HomeController: CardViewDelegate {
     model.switchScenario()
     userDetailsController.cardViewModel = model
     present(userDetailsController, animated: true)
+  }
+  
+  func willRemoveCard(_ view: CardView) {
+    lastCardIndex -= 1
   }
 }
