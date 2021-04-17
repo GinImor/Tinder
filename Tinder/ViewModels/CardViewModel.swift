@@ -10,12 +10,15 @@ import UIKit
 
 protocol CardModel {
   var uid: String { get }
+  var displayName: String { get }
   var attributedString: NSAttributedString { get }
   var textAlignment: NSTextAlignment { get }
   var validImageUrls: [String] { get }
 }
 
 extension User: CardModel {
+  
+  var displayName: String { name }
   
   var attributedString: NSAttributedString {
     let nameAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .largeTitle)]
@@ -35,6 +38,8 @@ extension User: CardModel {
 }
 
 extension Advertiser: CardModel {
+  
+  var displayName: String { title }
   
   var uid: String { "" }
   
@@ -67,7 +72,7 @@ class CardViewModel {
     indicators.arrangedSubviews[0].backgroundColor = .white
   }
   
-  private var cardModel: CardModel
+  private(set) var cardModel: CardModel
   private(set) var imageUrls: [String] = []
   
   private(set) var currentImageIndex: Int {

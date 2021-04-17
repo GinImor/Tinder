@@ -35,7 +35,7 @@ enum TinderFirebaseService {
   }
   
   static func pathForSTOChild(_ child: StorageChild, subChildren: String...) -> StorageReference {
-    return storage.child(pathString(child.rawValue, subChildren: subChildren))
+    storage.child(pathString(child.rawValue, subChildren: subChildren))
   }
   
   static func configure() {
@@ -128,15 +128,15 @@ enum TinderFirebaseService {
     }
   }
   
-  static func likeUserWithUid(_ uid: String, like: Bool, completion: @escaping (Error?) -> Void) {
+  static func likeUserWithUid(_ uid: String, like: Bool, completion: @escaping (Bool, Error?) -> ()) {
     guard let currentUserUid = currentUser?.uid else {
-      completion(NSError(domain: "", code: 3, userInfo: nil))
+      completion(false, NSError(domain: "", code: 3, userInfo: nil))
       return
     }
     let path = firestore.collection("Swipes").document(currentUserUid)
     path.getDocument { snapshot, error in
       guard let snapshot = snapshot, error == nil else {
-        completion(error)
+        completion(false, error)
         return
       }
       let data = [uid: like]
@@ -155,27 +155,27 @@ enum TinderFirebaseService {
   }
   
   private static func checkMatchUser(currentUid: String, like: Bool, likingUid: String, updatingLikeError: Error?,
-                                     completion: @escaping (Error?) -> ()) {
+                                     completion: @escaping (Bool, Error?) -> ()) {
     guard updatingLikeError == nil else {
-      completion(updatingLikeError)
+      completion(false, updatingLikeError)
       return
     }
     guard like else {
-      completion(nil)
+      completion(false, nil)
       return
     }
     let path = firestore.collection("Swipes").document(likingUid)
     path.getDocument { snapshot, error in
       guard error == nil else {
-        completion(error)
+        completion(false, error)
         return
       }
       guard let dataBlock = snapshot?.data(), (dataBlock[currentUid] as? Bool) == true else {
-        completion(nil)
+        completion(false, nil)
         return
       }
       print("find a match!")
-      completion(nil)
+      completion(true, nil)
     }
   }
   

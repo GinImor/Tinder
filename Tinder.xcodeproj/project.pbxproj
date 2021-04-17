@@ -10,10 +10,15 @@
 		470166C9C30CFEBFBC972928 /* Pods_Tinder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7810930C5E12CDE107F69D /* Pods_Tinder.framework */; };
 		C91B52172C62F0CA27922E0F /* LoginRegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B5EF87E9F8F85B7563CF4 /* LoginRegisterController.swift */; };
 		C91B521FDE8A2E086C232AE4 /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B56C3C0E7BF999C693A14 /* PhotoController.swift */; };
+		C91B522912BAC1346627F89C /* MatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B57B46B07E048D436A3AC /* MatchView.swift */; };
+		C91B524C405C832B8ADB9B46 /* SDWebImage+sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B56BB79F337EB28FB9DCA /* SDWebImage+sync.swift */; };
 		C91B526061E13ADFF5A4F6A4 /* UserDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B58DA2D0239C1CC51B370 /* UserDetailsController.swift */; };
 		C91B537B2AB9CAE360F4B095 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B531B6AA8257A5116A16C /* LoginController.swift */; };
+		C91B5557C5A86D659FFA1DDF /* CGSize+utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B51F8D43CD54536D4BE8F /* CGSize+utilities.swift */; };
 		C91B58E12AAE27D73139DEB2 /* SwipingPhotosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B5CC6FC21C2541B24841D /* SwipingPhotosController.swift */; };
+		C91B5A12F669F49D9C49FA00 /* GradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B565D15884849E5C8CF6A /* GradientButton.swift */; };
 		C91B5D68972C6F39A4286CB6 /* AgeRangeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B59CC57E8B7433BBD1485 /* AgeRangeCell.swift */; };
+		C91B5DA2955653D30F3D70A2 /* BorderGradientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B5ECFEEAD78A50A7AB80E /* BorderGradientButton.swift */; };
 		C91B5FD3907B6B9B15423480 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91B5EF650FDE6C5CB2F067E /* LoginViewModel.swift */; };
 		DC07706526088E630034C547 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC07706426088E630034C547 /* User.swift */; };
 		DC07706A26088FF90034C547 /* UIView+layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC07706926088FF90034C547 /* UIView+layout.swift */; };
@@ -43,11 +48,16 @@
 /* Begin PBXFileReference section */
 		33496F6F959EC9D18C755B33 /* Pods-Tinder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder.debug.xcconfig"; path = "Target Support Files/Pods-Tinder/Pods-Tinder.debug.xcconfig"; sourceTree = "<group>"; };
 		6F7514985E78335BF885483D /* Pods-Tinder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tinder.release.xcconfig"; path = "Target Support Files/Pods-Tinder/Pods-Tinder.release.xcconfig"; sourceTree = "<group>"; };
+		C91B51F8D43CD54536D4BE8F /* CGSize+utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+utilities.swift"; sourceTree = "<group>"; };
 		C91B531B6AA8257A5116A16C /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		C91B565D15884849E5C8CF6A /* GradientButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientButton.swift; sourceTree = "<group>"; };
+		C91B56BB79F337EB28FB9DCA /* SDWebImage+sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SDWebImage+sync.swift"; sourceTree = "<group>"; };
 		C91B56C3C0E7BF999C693A14 /* PhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
+		C91B57B46B07E048D436A3AC /* MatchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MatchView.swift; path = Tinder/Views/MatchView.swift; sourceTree = SOURCE_ROOT; };
 		C91B58DA2D0239C1CC51B370 /* UserDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsController.swift; sourceTree = "<group>"; };
 		C91B59CC57E8B7433BBD1485 /* AgeRangeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgeRangeCell.swift; sourceTree = "<group>"; };
 		C91B5CC6FC21C2541B24841D /* SwipingPhotosController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipingPhotosController.swift; sourceTree = "<group>"; };
+		C91B5ECFEEAD78A50A7AB80E /* BorderGradientButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderGradientButton.swift; sourceTree = "<group>"; };
 		C91B5EF650FDE6C5CB2F067E /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		C91B5EF87E9F8F85B7563CF4 /* LoginRegisterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRegisterController.swift; sourceTree = "<group>"; };
 		CC7810930C5E12CDE107F69D /* Pods_Tinder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tinder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +114,8 @@
 				DC07706926088FF90034C547 /* UIView+layout.swift */,
 				DC3F0295260A277800CD3D42 /* UIStackView+predefinedStackView.swift */,
 				DC3F0297260A278100CD3D42 /* UIEdgeInsets+convenience.swift */,
+				C91B51F8D43CD54536D4BE8F /* CGSize+utilities.swift */,
+				C91B56BB79F337EB28FB9DCA /* SDWebImage+sync.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -119,6 +131,7 @@
 				C91B58DA2D0239C1CC51B370 /* UserDetailsController.swift */,
 				C91B5CC6FC21C2541B24841D /* SwipingPhotosController.swift */,
 				C91B56C3C0E7BF999C693A14 /* PhotoController.swift */,
+				C91B57B46B07E048D436A3AC /* MatchView.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -141,6 +154,8 @@
 				DC3F0293260A24A300CD3D42 /* PaddingCellTextField.swift */,
 				DCA6B6BB260CBB9E0045C306 /* SettingsCell.swift */,
 				C91B59CC57E8B7433BBD1485 /* AgeRangeCell.swift */,
+				C91B565D15884849E5C8CF6A /* GradientButton.swift */,
+				C91B5ECFEEAD78A50A7AB80E /* BorderGradientButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -385,6 +400,11 @@
 				C91B526061E13ADFF5A4F6A4 /* UserDetailsController.swift in Sources */,
 				C91B58E12AAE27D73139DEB2 /* SwipingPhotosController.swift in Sources */,
 				C91B521FDE8A2E086C232AE4 /* PhotoController.swift in Sources */,
+				C91B522912BAC1346627F89C /* MatchView.swift in Sources */,
+				C91B5A12F669F49D9C49FA00 /* GradientButton.swift in Sources */,
+				C91B5DA2955653D30F3D70A2 /* BorderGradientButton.swift in Sources */,
+				C91B5557C5A86D659FFA1DDF /* CGSize+utilities.swift in Sources */,
+				C91B524C405C832B8ADB9B46 /* SDWebImage+sync.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

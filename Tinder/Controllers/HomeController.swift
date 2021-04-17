@@ -126,12 +126,28 @@ class HomeController: UIViewController {
   }
   
   private func uploadLikingStatusForCard(card: CardView, like: Bool) {
-    TinderFirebaseService.likeUserWithUid(card.uid, like: like) { error in
+    TinderFirebaseService.likeUserWithUid(card.uid, like: like) { [weak self] isMatch, error in
       if let error = error {
         print("liking user error", error)
         return
       }
-      print("successfully like user")
+      if isMatch {
+        print("successfully like user")
+        guard let matchedCardModel = card.cardViewModel?.cardModel,
+              let currentUser = self?.user else { return }
+        self?.presentMatchView(matchedUser: matchedCardModel, currentUser: currentUser)
+      }
+    }
+  }
+  
+  private func presentMatchView(matchedUser: CardModel, currentUser: CardModel) {
+    let matchView = MatchView(matchedUser: matchedUser, currentUser: currentUser)
+    matchView.pinToSuperviewEdges(pinnedView: view)
+    matchView.alpha = 0.0
+    UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0
+      , initialSpringVelocity: 1.0, options: .curveEaseOut
+    ) {
+      matchView.alpha = 1.0
     }
   }
   

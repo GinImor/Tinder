@@ -77,19 +77,6 @@ class CardView: UIView {
     )
   }
   
-//  @objc func handleTap(_ tap: UITapGestureRecognizer) {
-//    guard !barIndicators.isHidden, let viewModel = cardViewModel else { return }
-//    viewModel.disableCurrentBarIndicator(barIndicators)
-//    let location = tap.location(in: self)
-//    let nextImageUrl: String
-//    if location.x > bounds.width / 2 {
-//      nextImageUrl = viewModel.nextImage(toRight: true)!
-//    } else {
-//      nextImageUrl = viewModel.nextImage(toRight: false)!
-//    }
-//    viewModel.enableCurrentBarIndicator(barIndicators)
-//  }
-  
   private func transform(for translation: CGPoint) -> CGAffineTransform {
     let moveBy = CGAffineTransform(translationX: translation.x, y: translation.y)
     let rotation = -sin(translation.x / (frame.width * 4.0))
