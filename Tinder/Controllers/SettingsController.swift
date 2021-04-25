@@ -40,7 +40,7 @@ class SettingsController: UITableViewController {
     innerStackView.distribution = .fillEqually
     let outerStackView = UIStackView(arrangedSubviews: [imageButtons[0], innerStackView])
     outerStackView.spacing = 8
-    outerStackView.pinToSuperviewEdges(edgeInsets: .init(padding: 8), pinnedView: header)
+    outerStackView.pinToSuperviewEdges(edgeInsets: .init(8), pinnedView: header)
     imageButtons[0].widthAnchor.constraint(equalTo: header.widthAnchor, multiplier: 0.45).isActive = true
     return header
   }()

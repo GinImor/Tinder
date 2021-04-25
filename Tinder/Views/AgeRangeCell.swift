@@ -54,7 +54,7 @@ class AgeRangeCell: UITableViewCell {
     _ = UIStackView.verticalStack(
       arrangedSubviews: [minStackView, maxStackView],
       pinToSuperview: self,
-      edgeInsets: .init(padding: 16))
+      edgeInsets: .init(16))
     
     minSlider.addTarget(self, action: #selector(handleMinAgeChange), for: .valueChanged)
     maxSlider.addTarget(self, action: #selector(handleMaxAgeChange), for: .valueChanged)

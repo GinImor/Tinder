@@ -45,6 +45,9 @@
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                         </preferredSymbolConfiguration>
                                     </state>
+                                    <connections>
+                                        <action selector="handleShowMatches:" destination="iN0-l3-epB" eventType="touchUpInside" id="KcW-Fh-Kry"/>
+                                    </connections>
                                 </button>
                             </subviews>
                         </stackView>

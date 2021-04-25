@@ -200,8 +200,7 @@ enum TinderFirebaseService {
       print("successfully update image urls")
       var newUser = user
       newUser.imageUrls = imageUrls
-      storeCurrentUserToFirestore(user: newUser
-      ) { error in
+      storeCurrentUserToFirestore(user: newUser) { error in
         completion(newUser, error)
       }
     }
@@ -321,5 +320,174 @@ enum TinderFirebaseService {
     ref.setData(userData) { (error) in
       completion(error)
     }
+  }
+  
+  static func fetchMatches(completion: @escaping ([MatchUser]?, Error?) -> Void) {
+    guard let currentUserUid = currentUser?.uid else {
+      completion(nil, NSError(domain: "", code: 3))
+      return
+    }
+    matchesPathFor(currentUserUid).collection("Matches").getDocuments { querySnapshot, error in
+      guard error == nil else {
+        completion(nil, error)
+        return
+      }
+      let matches = querySnapshot!.documents.map { documentSnapshot in
+        MatchUser(userDic: documentSnapshot.data())
+      }
+      completion(matches, nil)
+    }
+  }
+  
+  static func storeMatches(_ userOne: CardModel, _ userTwo: CardModel, completion: @escaping (Error?) -> Void) {
+    storeMatchesFor(userOne, matched: userTwo) { error in
+      completion(error)
+    }
+    storeMatchesFor(userTwo, matched: userOne) { error in
+      completion(error)
+    }
+  }
+  
+  private static func storeMatchesFor(_ user: CardModel, matched: CardModel, completion: @escaping (Error?) -> Void) {
+    storeMetaDataToFirestore(
+      path: matchesPathFor(user.uid, matched.uid),
+      dataProvider: {
+        var dataBlock: [String: Any] = [
+          "name": matched.displayName,
+          "uid": matched.uid,
+          "timestamp": Timestamp(date: Date())
+        ]
+        if let profileImageUrl = matched.validImageUrls.first {
+          dataBlock["profileImageUrl"] = profileImageUrl
+        }
+        return dataBlock
+      }) { error in
+      completion(error)
+    }
+  }
+  
+  private static func matchesPathFor(_ owner: String, _ matched: String = "") -> DocumentReference {
+    let path = firestore.collection("MatchesInfo").document(owner)
+    if matched == "" { return path }
+    else { return path.collection("Matches").document(matched) }
+  }
+  
+  static func fetchMessages(
+    toUid: String,
+    nextMessageHandler: @escaping (Message) -> Void,
+    completion: @escaping (Error?) -> Void
+  )-> ListenerRegistration? {
+    guard let currentUid = currentUser?.uid else {
+      completion(NSError(domain: "", code: 3, userInfo: nil))
+      return nil
+    }
+    let query = messagePathFor(currentUid, toUid).order(by: "timestamp")
+    let listener = query.addSnapshotListener { (querySnapshot, error) in
+      guard error == nil else {
+        completion(error)
+        return
+      }
+      querySnapshot?.documentChanges.forEach {
+        if $0.type == .added {
+          nextMessageHandler(Message(dataDic: $0.document.data()))
+        }
+      }
+      completion(nil)
+    }
+    return listener
+  }
+  
+  static let messageDispatchGroup = DispatchGroup()
+  
+  static func storeMessage(_ message: String, toUid: String, completion: @escaping (Error?) -> Void) {
+    guard let currentUid = currentUser?.uid else {
+      completion(NSError(domain: "", code: 3, userInfo: nil))
+      return
+    }
+    let dataBlock: [String: Any] = [
+      "fromUid": currentUid,
+      "text": message,
+      "timestamp": Timestamp(date: Date()),
+      "toUid": toUid
+    ]
+    storeMessage(dataBlock, for: currentUid, to: toUid, completion: completion)
+    storeMessage(dataBlock, for: toUid, to: currentUid, completion: completion)
+    messageDispatchGroup.notify(queue: .main) { completion(nil) }
+  }
+  
+  private static func storeMessage(
+    _ dataBlock: [String: Any],
+    for fromUid: String,
+    to toUid: String,
+    completion: @escaping (Error?) -> Void
+  ) {
+    messageDispatchGroup.enter()
+    messagePathFor(fromUid, toUid).addDocument(data: dataBlock) { error in
+      defer { messageDispatchGroup.leave() }
+      if error != nil { completion(error) }
+    }
+  }
+  
+  private static func messagePathFor(_ owner: String, _ matched: String) -> CollectionReference {
+    firestore.collection("MatchesInfo").document(owner).collection(matched)
+  }
+  
+  static func fetchRecentMessages(
+    nextMessageHandler: @escaping (RecentMessage) -> Void,
+    completion: @escaping (Error?) -> Void
+  ) -> ListenerRegistration? {
+    guard let currentUid = currentUser?.uid else {
+      completion(NSError(domain: "", code: 3))
+      return nil
+    }
+    let listener = recentMessagePathFor(currentUid).addSnapshotListener { querySnapshot, error in
+      guard error == nil else {
+        completion(error)
+        return
+      }
+      querySnapshot?.documentChanges.forEach {
+        if $0.type == .added || $0.type == .modified {
+          nextMessageHandler(RecentMessage(messageDic: $0.document.data()))
+        }
+      }
+      completion(nil)
+    }
+    return listener
+  }
+  
+  static func storeRecentMessage(
+    _ text: String,
+    currentUser: UserModel,
+    chattingUser: UserModel,
+    completion: @escaping (Error?) -> Void
+  ) {
+    storeRecentMessage(text, for: currentUser, to: chattingUser, completion: completion)
+    storeRecentMessage(text, for: chattingUser, to: currentUser, completion: completion)
+  }
+  
+  private static func storeRecentMessage(
+    _ text: String,
+    for currentUser: UserModel,
+    to chattingUser: UserModel,
+    completion: @escaping (Error?) -> Void
+  ) {
+    let dataBlock: [String: Any] = [
+      "uid": chattingUser.uid,
+      "profileImageUrl": chattingUser.profileImageUrl,
+      "username": chattingUser.name,
+      "text": text,
+      "timestamp": Timestamp(date: Date())
+    ]
+    let path = recentMessagePathFor(currentUser.uid).document(chattingUser.uid)
+    path.setData(dataBlock) { error in
+      guard error == nil else {
+        completion(error)
+        return
+      }
+    }
+  }
+  
+  private static func recentMessagePathFor(_ uid: String) -> CollectionReference {
+    firestore.collection("MatchesInfo").document(uid).collection("RecentMessages")
   }
 }

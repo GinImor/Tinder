@@ -32,27 +32,31 @@ class HomeController: UIViewController {
         hud.show(in: view)
         cardDeckView.subviews.forEach { $0.removeFromSuperview() }
       }
-      TinderFirebaseService.fetchSwipedUsers() { [weak self] swipedUsers, error in
+      fetchDataForUser(user)
+    }
+  }
+  
+  private func fetchDataForUser(_ user: User) {
+    TinderFirebaseService.fetchSwipedUsers() { [weak self] swipedUsers, error in
+      guard error == nil else {
+        print("fetch swiped users error", error!)
+        return
+      }
+      self?.swipedUsers = swipedUsers!
+      TinderFirebaseService.fetchUsersBetweenAgeRange(
+        minAge: user.minSeekingAge,
+        maxAge: user.maxSeekingAge,
+        nextUserHandler: { [weak self] user in
+          guard let strongSelf = self, strongSelf.swipedUsers[user.uid] == nil else { return }
+          strongSelf.modelTypes.append(user)
+          strongSelf.createCardViewWithModelType(user)
+        }) { [weak self] (error) in
+        self?.hud.dismiss()
         guard error == nil else {
-          print("fetch swiped users error", error!)
+          print("fetch users error: \(String(describing: error))")
           return
         }
-        self?.swipedUsers = swipedUsers!
-        TinderFirebaseService.fetchUsersBetweenAgeRange(
-          minAge: user.minSeekingAge,
-          maxAge: user.maxSeekingAge,
-          nextUserHandler: { [weak self] user in
-            guard let strongSelf = self, strongSelf.swipedUsers[user.uid] == nil else { return }
-            strongSelf.modelTypes.append(user)
-            strongSelf.createCardViewWithModelType(user)
-          }) { [weak self] (error) in
-          self?.hud.dismiss()
-          guard error == nil else {
-            print("fetch users error: \(String(describing: error))")
-            return
-          }
-          print("successfully fetched users")
-        }
+        print("successfully fetched users")
       }
     }
   }
@@ -71,7 +75,6 @@ class HomeController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
     setupViews()
     fetchQualifiedUsers()
   }
@@ -87,6 +90,7 @@ class HomeController: UIViewController {
   }
   
   private func setupViews() {
+    navigationController?.navigationBar.isHidden = true
     view.backgroundColor = .systemBackground
     containerView.frame = view.bounds
     view.addSubview(containerView)
@@ -100,8 +104,17 @@ class HomeController: UIViewController {
     containerView.didTapDislike = {
       self.handleDislike()
     }
+    containerView.didTapMessages = {
+      self.handleShowMatches()
+    }
     // zPosition take effect when the views are in the same level
     cardDeckView.layer.zPosition = 10
+  }
+  
+  private func handleShowMatches() {
+    let matches = MatchesController()
+    matches.user = user
+    navigationController?.pushViewController(matches, animated: true)
   }
   
   private func handleDislike() {
@@ -131,12 +144,22 @@ class HomeController: UIViewController {
         print("liking user error", error)
         return
       }
-      if isMatch {
-        print("successfully like user")
-        guard let matchedCardModel = card.cardViewModel?.cardModel,
-              let currentUser = self?.user else { return }
-        self?.presentMatchView(matchedUser: matchedCardModel, currentUser: currentUser)
+      guard isMatch else { return }
+      print("successfully like user")
+      guard let matchedCardModel = card.cardViewModel?.cardModel,
+            let currentUser = self?.user else { return }
+      self?.presentMatchView(matchedUser: matchedCardModel, currentUser: currentUser)
+      self?.uploadMatches(currentUser, matchedCardModel)
+    }
+  }
+  
+  private func uploadMatches(_ userOne: CardModel, _ userTwo: CardModel) {
+    TinderFirebaseService.storeMatches(userOne, userTwo) { error in
+      if let error = error {
+        print("store matches error", error)
+        return
       }
+      print("successfully store matches")
     }
   }
   

@@ -13,6 +13,7 @@ class HomeView: UIView {
   var didTapRefresh: (() -> Void)?
   var didTapLike: (() -> Void)?
   var didTapDislike: (() -> Void)?
+  var didTapMessages: (() -> Void)?
   
   @IBOutlet weak var settingsButton: UIButton!
   
@@ -34,5 +35,9 @@ class HomeView: UIView {
   }
   @IBAction func handleDislike(_ sender: Any) {
     didTapDislike?()
+  }
+  
+  @IBAction func handleShowMatches(_ sender: Any) {
+    didTapMessages?()
   }
 }

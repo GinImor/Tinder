@@ -153,10 +153,10 @@ class MatchView: UIView {
     
     messageLabel.text = "You and \(matchedUser.displayName) have liked each other"
     
-    matchTitleImageView.setSize(CGSize(height: 80))
-    messageLabel.setSize(CGSize(height: 50))
-    currentUserImageView.setSize(CGSize(widthHeight: MatchView.imageWidth))
-    sendMessageButton.setSize(CGSize(height: 50))
+    matchTitleImageView.sizing(height: 80)
+    messageLabel.sizing(height: 50)
+    currentUserImageView.sizing(to: MatchView.imageWidth)
+    sendMessageButton.sizing(height: 50)
   }
   
   @objc func handleDismiss() {
