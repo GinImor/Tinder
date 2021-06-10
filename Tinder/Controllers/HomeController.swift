@@ -175,7 +175,7 @@ class HomeController: UIViewController {
   }
   
   private func handleRefresh() {
-    fetchUsers()
+    fillUpCardDeckView()
   }
   
   private func fetchUsers() {
@@ -221,6 +221,10 @@ class HomeController: UIViewController {
   }
   
   fileprivate func fillUpCardDeckView() {
+    cardDeckView.subviews.forEach {
+      $0.removeFromSuperview()
+    }
+    lastCardIndex = -1
     modelTypes.forEach { (modelType) in
       createCardViewWithModelType(modelType)
     }

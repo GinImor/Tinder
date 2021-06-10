@@ -69,7 +69,7 @@
 		DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBEEAEE2607684F00B71F16 /* HomeController.swift */; };
 		DCBEEAF42607685000B71F16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DCBEEAF32607685000B71F16 /* Assets.xcassets */; };
 		DCBEEAF72607685000B71F16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DCBEEAF52607685000B71F16 /* LaunchScreen.storyboard */; };
-		DCDA51602608E73B00AC2194 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDA515F2608E73B00AC2194 /* Advertiser.swift */; };
+		DCE7AA1726721D400058612C /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCE7AA1626721D400058612C /* Advertiser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -139,7 +139,7 @@
 		DCBEEAF32607685000B71F16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DCBEEAF62607685000B71F16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DCBEEAF82607685000B71F16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DCDA515F2608E73B00AC2194 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Advertiser.swift; path = Tinder/Advertiser.swift; sourceTree = SOURCE_ROOT; };
+		DCE7AA1626721D400058612C /* Advertiser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,8 +242,8 @@
 			isa = PBXGroup;
 			children = (
 				DC07706426088E630034C547 /* User.swift */,
-				DCDA515F2608E73B00AC2194 /* Advertiser.swift */,
 				C91B5D4D88C5926CFB7A5D60 /* Message.swift */,
+				DCE7AA1626721D400058612C /* Advertiser.swift */,
 				C91B58283187D85C794574B5 /* RecentMessage.swift */,
 				C91B57FE7F8D2668F55E4B74 /* MatchUser.swift */,
 			);
@@ -461,10 +461,10 @@
 				DCA6B6BC260CBB9E0045C306 /* SettingsCell.swift in Sources */,
 				DCBEEAEF2607684F00B71F16 /* HomeController.swift in Sources */,
 				DC3F0298260A278100CD3D42 /* UIEdgeInsets+convenience.swift in Sources */,
-				DCDA51602608E73B00AC2194 /* Advertiser.swift in Sources */,
 				DC60C38E2607860400D6052E /* HomeView.swift in Sources */,
 				DC5D60EA260B382600DA4A29 /* TinderFirebaseService.swift in Sources */,
 				DC07706526088E630034C547 /* User.swift in Sources */,
+				DCE7AA1726721D400058612C /* Advertiser.swift in Sources */,
 				DC07706E2608C8960034C547 /* CardViewModel.swift in Sources */,
 				DCA6B6BA260C9C520045C306 /* SettingsController.swift in Sources */,
 				DCBEEAEB2607684F00B71F16 /* AppDelegate.swift in Sources */,
