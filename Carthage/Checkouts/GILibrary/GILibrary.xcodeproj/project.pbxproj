@@ -1,0 +1,546 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DC8EE0F0265401F7002DFDAD /* UIColor+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8EE0EF265401F7002DFDAD /* UIColor+hex.swift */; };
+		DCB87C94264B945D00CF250A /* GIListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCB87C93264B945D00CF250A /* GIListController.swift */; };
+		DCE03F63264B7BBC00161C8C /* GIGridSelfSizingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCE03F62264B7BBC00161C8C /* GIGridSelfSizingCell.swift */; };
+		DCEAF27A264B702300AA7E88 /* GILibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = DCEAF278264B702300AA7E88 /* GILibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DCEAF293264B70DB00AA7E88 /* GIGridController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF281264B70DA00AA7E88 /* GIGridController.swift */; };
+		DCEAF294264B70DB00AA7E88 /* UILabel+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF282264B70DA00AA7E88 /* UILabel+constructor.swift */; };
+		DCEAF295264B70DB00AA7E88 /* IndentedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF283264B70DA00AA7E88 /* IndentedTextField.swift */; };
+		DCEAF296264B70DB00AA7E88 /* UITextField+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF284264B70DA00AA7E88 /* UITextField+constructor.swift */; };
+		DCEAF297264B70DB00AA7E88 /* UIView+layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF285264B70DA00AA7E88 /* UIView+layout.swift */; };
+		DCEAF298264B70DB00AA7E88 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF286264B70DA00AA7E88 /* Stack.swift */; };
+		DCEAF299264B70DB00AA7E88 /* UIViewController+navInTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF287264B70DA00AA7E88 /* UIViewController+navInTabBar.swift */; };
+		DCEAF29A264B70DB00AA7E88 /* CGRect+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF288264B70DA00AA7E88 /* CGRect+convenience.swift */; };
+		DCEAF29B264B70DB00AA7E88 /* UIView+layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF289264B70DA00AA7E88 /* UIView+layer.swift */; };
+		DCEAF29C264B70DB00AA7E88 /* UIButton+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28A264B70DA00AA7E88 /* UIButton+constructor.swift */; };
+		DCEAF29D264B70DB00AA7E88 /* UIStackView+padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28B264B70DA00AA7E88 /* UIStackView+padding.swift */; };
+		DCEAF29E264B70DB00AA7E88 /* CGSize+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28C264B70DB00AA7E88 /* CGSize+constructor.swift */; };
+		DCEAF29F264B70DB00AA7E88 /* GIGridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28D264B70DB00AA7E88 /* GIGridCell.swift */; };
+		DCEAF2A0264B70DB00AA7E88 /* UIColor+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28E264B70DB00AA7E88 /* UIColor+constructor.swift */; };
+		DCEAF2A1264B70DB00AA7E88 /* UIView+oneSideBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF28F264B70DB00AA7E88 /* UIView+oneSideBorder.swift */; };
+		DCEAF2A2264B70DB00AA7E88 /* UIButton+convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF290264B70DB00AA7E88 /* UIButton+convenience.swift */; };
+		DCEAF2A3264B70DB00AA7E88 /* UIEdgeInsets+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF291264B70DB00AA7E88 /* UIEdgeInsets+constructor.swift */; };
+		DCEAF2A4264B70DB00AA7E88 /* UIImageView+constructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF292264B70DB00AA7E88 /* UIImageView+constructor.swift */; };
+		DCEAF2A8264B79A100AA7E88 /* GISnappingGridController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF2A6264B79A100AA7E88 /* GISnappingGridController.swift */; };
+		DCEAF2A9264B79A100AA7E88 /* GISnappingLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEAF2A7264B79A100AA7E88 /* GISnappingLayout.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DC8EE0EF265401F7002DFDAD /* UIColor+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+hex.swift"; sourceTree = "<group>"; };
+		DCB87C93264B945D00CF250A /* GIListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIListController.swift; sourceTree = "<group>"; };
+		DCE03F62264B7BBC00161C8C /* GIGridSelfSizingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIGridSelfSizingCell.swift; sourceTree = "<group>"; };
+		DCEAF275264B702300AA7E88 /* GILibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GILibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCEAF278264B702300AA7E88 /* GILibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GILibrary.h; sourceTree = "<group>"; };
+		DCEAF279264B702300AA7E88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DCEAF281264B70DA00AA7E88 /* GIGridController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIGridController.swift; sourceTree = "<group>"; };
+		DCEAF282264B70DA00AA7E88 /* UILabel+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF283264B70DA00AA7E88 /* IndentedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndentedTextField.swift; sourceTree = "<group>"; };
+		DCEAF284264B70DA00AA7E88 /* UITextField+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF285264B70DA00AA7E88 /* UIView+layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+layout.swift"; sourceTree = "<group>"; };
+		DCEAF286264B70DA00AA7E88 /* Stack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
+		DCEAF287264B70DA00AA7E88 /* UIViewController+navInTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+navInTabBar.swift"; sourceTree = "<group>"; };
+		DCEAF288264B70DA00AA7E88 /* CGRect+convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+convenience.swift"; sourceTree = "<group>"; };
+		DCEAF289264B70DA00AA7E88 /* UIView+layer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+layer.swift"; sourceTree = "<group>"; };
+		DCEAF28A264B70DA00AA7E88 /* UIButton+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF28B264B70DA00AA7E88 /* UIStackView+padding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStackView+padding.swift"; sourceTree = "<group>"; };
+		DCEAF28C264B70DB00AA7E88 /* CGSize+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGSize+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF28D264B70DB00AA7E88 /* GIGridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GIGridCell.swift; sourceTree = "<group>"; };
+		DCEAF28E264B70DB00AA7E88 /* UIColor+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF28F264B70DB00AA7E88 /* UIView+oneSideBorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+oneSideBorder.swift"; sourceTree = "<group>"; };
+		DCEAF290264B70DB00AA7E88 /* UIButton+convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+convenience.swift"; sourceTree = "<group>"; };
+		DCEAF291264B70DB00AA7E88 /* UIEdgeInsets+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF292264B70DB00AA7E88 /* UIImageView+constructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+constructor.swift"; sourceTree = "<group>"; };
+		DCEAF2A6264B79A100AA7E88 /* GISnappingGridController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GISnappingGridController.swift; sourceTree = "<group>"; };
+		DCEAF2A7264B79A100AA7E88 /* GISnappingLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GISnappingLayout.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DCEAF272264B702300AA7E88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DCE03F66264B7BF400161C8C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF2A6264B79A100AA7E88 /* GISnappingGridController.swift */,
+				DCEAF281264B70DA00AA7E88 /* GIGridController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		DCE03F68264B7C0300161C8C /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF2A7264B79A100AA7E88 /* GISnappingLayout.swift */,
+			);
+			path = Layouts;
+			sourceTree = "<group>";
+		};
+		DCE03F6A264B7C2D00161C8C /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				DCE03F7E264B93F700161C8C /* ListController */,
+				DCEAF2AD264B7A5200AA7E88 /* GridController */,
+				DCE03F70264B7C9400161C8C /* Stack */,
+				DCE03F72264B7CAE00161C8C /* TextField */,
+				DCE03F6E264B7C6600161C8C /* Button */,
+				DCE03F7C264B7E0A00161C8C /* Other */,
+				DCE03F78264B7DCF00161C8C /* Image */,
+				DCE03F75264B7DB100161C8C /* Label */,
+				DCE03F6F264B7C7700161C8C /* UIView */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		DCE03F6C264B7C3C00161C8C /* Core Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF288264B70DA00AA7E88 /* CGRect+convenience.swift */,
+				DCEAF28C264B70DB00AA7E88 /* CGSize+constructor.swift */,
+			);
+			path = "Core Graphics";
+			sourceTree = "<group>";
+		};
+		DCE03F6E264B7C6600161C8C /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF28A264B70DA00AA7E88 /* UIButton+constructor.swift */,
+				DCEAF290264B70DB00AA7E88 /* UIButton+convenience.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
+		DCE03F6F264B7C7700161C8C /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF289264B70DA00AA7E88 /* UIView+layer.swift */,
+				DCEAF285264B70DA00AA7E88 /* UIView+layout.swift */,
+				DCEAF28F264B70DB00AA7E88 /* UIView+oneSideBorder.swift */,
+				DCEAF287264B70DA00AA7E88 /* UIViewController+navInTabBar.swift */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		DCE03F70264B7C9400161C8C /* Stack */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF286264B70DA00AA7E88 /* Stack.swift */,
+				DCEAF28B264B70DA00AA7E88 /* UIStackView+padding.swift */,
+			);
+			path = Stack;
+			sourceTree = "<group>";
+		};
+		DCE03F72264B7CAE00161C8C /* TextField */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF283264B70DA00AA7E88 /* IndentedTextField.swift */,
+				DCEAF284264B70DA00AA7E88 /* UITextField+constructor.swift */,
+			);
+			path = TextField;
+			sourceTree = "<group>";
+		};
+		DCE03F75264B7DB100161C8C /* Label */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF282264B70DA00AA7E88 /* UILabel+constructor.swift */,
+			);
+			path = Label;
+			sourceTree = "<group>";
+		};
+		DCE03F78264B7DCF00161C8C /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF292264B70DB00AA7E88 /* UIImageView+constructor.swift */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
+		DCE03F7C264B7E0A00161C8C /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				DC8EE0EF265401F7002DFDAD /* UIColor+hex.swift */,
+				DCEAF28E264B70DB00AA7E88 /* UIColor+constructor.swift */,
+				DCEAF291264B70DB00AA7E88 /* UIEdgeInsets+constructor.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		DCE03F7E264B93F700161C8C /* ListController */ = {
+			isa = PBXGroup;
+			children = (
+				DCB87C93264B945D00CF250A /* GIListController.swift */,
+			);
+			path = ListController;
+			sourceTree = "<group>";
+		};
+		DCEAF26B264B702300AA7E88 = {
+			isa = PBXGroup;
+			children = (
+				DCEAF277264B702300AA7E88 /* GILibrary */,
+				DCEAF276264B702300AA7E88 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DCEAF276264B702300AA7E88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF275264B702300AA7E88 /* GILibrary.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DCEAF277264B702300AA7E88 /* GILibrary */ = {
+			isa = PBXGroup;
+			children = (
+				DCE03F6C264B7C3C00161C8C /* Core Graphics */,
+				DCE03F6A264B7C2D00161C8C /* UIKit */,
+				DCEAF278264B702300AA7E88 /* GILibrary.h */,
+				DCEAF279264B702300AA7E88 /* Info.plist */,
+			);
+			path = GILibrary;
+			sourceTree = "<group>";
+		};
+		DCEAF2AD264B7A5200AA7E88 /* GridController */ = {
+			isa = PBXGroup;
+			children = (
+				DCEAF2B2264B7AF500AA7E88 /* Cells */,
+				DCE03F68264B7C0300161C8C /* Layouts */,
+				DCE03F66264B7BF400161C8C /* Controllers */,
+			);
+			path = GridController;
+			sourceTree = "<group>";
+		};
+		DCEAF2B2264B7AF500AA7E88 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				DCE03F62264B7BBC00161C8C /* GIGridSelfSizingCell.swift */,
+				DCEAF28D264B70DB00AA7E88 /* GIGridCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DCEAF270264B702300AA7E88 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCEAF27A264B702300AA7E88 /* GILibrary.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DCEAF274264B702300AA7E88 /* GILibrary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DCEAF27D264B702300AA7E88 /* Build configuration list for PBXNativeTarget "GILibrary" */;
+			buildPhases = (
+				DCEAF270264B702300AA7E88 /* Headers */,
+				DCEAF271264B702300AA7E88 /* Sources */,
+				DCEAF272264B702300AA7E88 /* Frameworks */,
+				DCEAF273264B702300AA7E88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GILibrary;
+			productName = GILibrary;
+			productReference = DCEAF275264B702300AA7E88 /* GILibrary.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DCEAF26C264B702300AA7E88 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1240;
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					DCEAF274264B702300AA7E88 = {
+						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
+					};
+				};
+			};
+			buildConfigurationList = DCEAF26F264B702300AA7E88 /* Build configuration list for PBXProject "GILibrary" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DCEAF26B264B702300AA7E88;
+			productRefGroup = DCEAF276264B702300AA7E88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCEAF274264B702300AA7E88 /* GILibrary */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DCEAF273264B702300AA7E88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DCEAF271264B702300AA7E88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DCEAF29C264B70DB00AA7E88 /* UIButton+constructor.swift in Sources */,
+				DCEAF2A8264B79A100AA7E88 /* GISnappingGridController.swift in Sources */,
+				DCEAF2A3264B70DB00AA7E88 /* UIEdgeInsets+constructor.swift in Sources */,
+				DCEAF2A1264B70DB00AA7E88 /* UIView+oneSideBorder.swift in Sources */,
+				DCEAF29B264B70DB00AA7E88 /* UIView+layer.swift in Sources */,
+				DCB87C94264B945D00CF250A /* GIListController.swift in Sources */,
+				DCEAF296264B70DB00AA7E88 /* UITextField+constructor.swift in Sources */,
+				DC8EE0F0265401F7002DFDAD /* UIColor+hex.swift in Sources */,
+				DCE03F63264B7BBC00161C8C /* GIGridSelfSizingCell.swift in Sources */,
+				DCEAF299264B70DB00AA7E88 /* UIViewController+navInTabBar.swift in Sources */,
+				DCEAF29D264B70DB00AA7E88 /* UIStackView+padding.swift in Sources */,
+				DCEAF2A9264B79A100AA7E88 /* GISnappingLayout.swift in Sources */,
+				DCEAF297264B70DB00AA7E88 /* UIView+layout.swift in Sources */,
+				DCEAF2A2264B70DB00AA7E88 /* UIButton+convenience.swift in Sources */,
+				DCEAF29A264B70DB00AA7E88 /* CGRect+convenience.swift in Sources */,
+				DCEAF298264B70DB00AA7E88 /* Stack.swift in Sources */,
+				DCEAF293264B70DB00AA7E88 /* GIGridController.swift in Sources */,
+				DCEAF29F264B70DB00AA7E88 /* GIGridCell.swift in Sources */,
+				DCEAF29E264B70DB00AA7E88 /* CGSize+constructor.swift in Sources */,
+				DCEAF294264B70DB00AA7E88 /* UILabel+constructor.swift in Sources */,
+				DCEAF2A4264B70DB00AA7E88 /* UIImageView+constructor.swift in Sources */,
+				DCEAF2A0264B70DB00AA7E88 /* UIColor+constructor.swift in Sources */,
+				DCEAF295264B70DB00AA7E88 /* IndentedTextField.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DCEAF27B264B702300AA7E88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_VERIFY_BITCODE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DCEAF27C264B702300AA7E88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_VERIFY_BITCODE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DCEAF27E264B702300AA7E88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CRF7U674EN;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GILibrary/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = China.FoeverKid.FreeLove.GILibrary;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DCEAF27F264B702300AA7E88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CRF7U674EN;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GILibrary/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = China.FoeverKid.FreeLove.GILibrary;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DCEAF26F264B702300AA7E88 /* Build configuration list for PBXProject "GILibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCEAF27B264B702300AA7E88 /* Debug */,
+				DCEAF27C264B702300AA7E88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DCEAF27D264B702300AA7E88 /* Build configuration list for PBXNativeTarget "GILibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCEAF27E264B702300AA7E88 /* Debug */,
+				DCEAF27F264B702300AA7E88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DCEAF26C264B702300AA7E88 /* Project object */;
+}

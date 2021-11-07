@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
-    TinderFirebaseService.configure()
+    FirebaseApp.configure()
+    // disable multitouch, allow it could cause problems, for example, if user is panning a card
+    // and tapping refresh button, card deck view will reuse the panning card, if user is panning
+    // card and tapping like button, then the lastCardIndex will increased twice for the same card
+    UIView.appearance().isExclusiveTouch = true
     return true
   }
 
