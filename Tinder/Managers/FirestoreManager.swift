@@ -273,13 +273,13 @@ class FirestoreManager {
     return userInfo!
   }
   
-  var matchUserCell: [String: UserInfoCell<MatchUser>] = [:]
+  var matchUserCell: [String: UserInfoCell] = [:]
 
-  func registerMatchUserCell(_ cell: UserInfoCell<MatchUser>) {
+  func registerMatchUserCell(_ cell: UserInfoCell) {
     matchUserCell[cell.uid] = cell
   }
   
-  func unregisterMatchUserCell(_ cell: UserInfoCell<MatchUser>) {
+  func unregisterMatchUserCell(_ cell: UserInfoCell) {
     matchUserCell[cell.uid] = nil
   }
   
@@ -374,13 +374,13 @@ class FirestoreManager {
     }
   }
 
-  var recentMessageCell: [String: UserInfoCell<RecentMessage>] = [:]
+  var recentMessageCell: [String: UserInfoCell] = [:]
   
-  func registerRecentMessageCell(_ cell: UserInfoCell<RecentMessage>) {
+  func registerRecentMessageCell(_ cell: UserInfoCell) {
     recentMessageCell[cell.uid] = cell
   }
   
-  func unregisterRecentMessageCell(_ cell: UserInfoCell<RecentMessage>) {
+  func unregisterRecentMessageCell(_ cell: UserInfoCell) {
     recentMessageCell[cell.uid] = nil
   }
   

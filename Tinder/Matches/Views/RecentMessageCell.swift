@@ -9,32 +9,52 @@
 import UIKit
 import GILibrary
 
-class UserInfoCell<T>: GIGridCell<T> {
-  var profileImageView: UIImageView!
-  var usernameLabel: UILabel!
-  var uid: String!
+protocol UserInfoCell: AnyObject {
+  var profileImageView: UIImageView! { get }
+  var usernameLabel: UILabel! { get }
+  var uid: String! { get set }
   
-  func setUsername(_ name: String?, imageUrl: String?) {
+  func setUsername(_ name: String?, imageUrl: String?)
+}
+
+extension UserInfoCell {
+  
+  func _setUsername(_ name: String?, imageUrl: String?) {
     usernameLabel.text = name
     if let imageUrlString = imageUrl {
       profileImageView.sd_setImage(with: URL(string: imageUrlString))
     }
   }
   
-  override func prepareForReuse() {
+  func _prepareForReuse() {
     profileImageView.image = nil
     usernameLabel.text = nil
     uid = nil
   }
+  
 }
 
 
-class RecentMessageCell: UserInfoCell<RecentMessage> {
+class RecentMessageCell: UITableViewCell, UserInfoCell {
+  
+  var profileImageView: UIImageView!
+  var usernameLabel: UILabel!
+  var uid: String!
+  
+  var message: String?
   
   let messageLabel = UILabel.new("", .footnote, 2)
-
-  override func setup() {
-    super.setup()
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+    setup()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func setup() {
     profileImageView = UIImageView.new(cornerRadius: 45)
     usernameLabel = UILabel.new("", .title3)
     messageLabel.textColor = .systemGray
@@ -48,17 +68,14 @@ class RecentMessageCell: UserInfoCell<RecentMessage> {
     addBottomBorder(leadingAnchor: usernameLabel.leadingAnchor)
   }
   
-  override func didSetItem() {
-    uid = item.uid
-  }
-  
-  override func setUsername(_ name: String?, imageUrl: String?) {
-    super.setUsername(name, imageUrl: imageUrl)
-    messageLabel.text = item.text
+  func setUsername(_ name: String?, imageUrl: String?) {
+    _setUsername(name, imageUrl: imageUrl)
+    messageLabel.text = message
   }
   
   override func prepareForReuse() {
     db.unregisterRecentMessageCell(self)
+    _prepareForReuse()
     super.prepareForReuse()
   }
   

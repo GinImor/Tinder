@@ -9,10 +9,22 @@
 import UIKit
 import GILibrary
 
-class MatchUserCell: UserInfoCell<MatchUser> {
+class MatchUserCell: UICollectionViewCell, UserInfoCell {
   
-  override func setup() {
-    super.setup()
+  var profileImageView: UIImageView!
+  var usernameLabel: UILabel!
+  var uid: String!
+  
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    setup()
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  func setup() {
     profileImageView = UIImageView.new(cornerRadius: 30)
     usernameLabel = UILabel.new("", .caption1, UIColor(rgb: 57), .center)
     vStack(
@@ -20,13 +32,14 @@ class MatchUserCell: UserInfoCell<MatchUser> {
       usernameLabel
     ).aligning(.center).add(to: self).filling()
   }
-
-  override func didSetItem() {
-    uid = item.uid
+  
+  func setUsername(_ name: String?, imageUrl: String?) {
+    _setUsername(name, imageUrl: imageUrl)
   }
   
   override func prepareForReuse() {
     db.unregisterMatchUserCell(self)
+    _prepareForReuse()
     super.prepareForReuse()
   }
   

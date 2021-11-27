@@ -9,8 +9,6 @@
 import UIKit
 import JGProgressHUD
 import GILibrary
-import Firebase
-import SDWebImage
 
 extension UINib {
   static func viewWithName(_ nibName: String) -> UIView {
@@ -48,7 +46,6 @@ class HomeController: UIViewController {
   
   private var userDetailsController: UserDetailsController!
 
-  private var listener: ListenerRegistration?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -176,7 +173,7 @@ class HomeController: UIViewController {
   }
 
   @IBAction private func handleShowMatches() {
-    let matches = RecentMessagesController()
+    let matches = MatchesController()
     navigationController?.pushViewController(matches, animated: true)
   }
   

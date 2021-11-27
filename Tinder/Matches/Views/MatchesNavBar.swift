@@ -1,5 +1,5 @@
 //
-// RecentMessagesNavBar.swift
+// MatchesNavBar.swift
 // Tinder
 //
 // Created by Gin Imor on 4/19/21.
@@ -9,13 +9,13 @@
 import UIKit
 import GILibrary
 
-protocol RecentMessagesNavBarDelegate: AnyObject {
+protocol MatchesNavBarDelegate: AnyObject {
   func didTappedBackButton()
 }
 
-class RecentMessagesNavBar: UIView {
+class MatchesNavBar: UIView {
   
-  weak var delegate: RecentMessagesNavBarDelegate?
+  weak var delegate: MatchesNavBarDelegate?
 
   override init(frame: CGRect = .zero) {
     super.init(frame: frame)
