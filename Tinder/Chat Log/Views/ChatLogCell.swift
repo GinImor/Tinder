@@ -9,7 +9,7 @@
 import UIKit
 import GILibrary
 
-class ChatLogCell: GIGridSelfSizingCell<Message> {
+class ChatLogCell: GIGridCell<Message> {
   
   private let bubbleView = UIView()
   private let chatTextView: UITextView = {
@@ -29,10 +29,7 @@ class ChatLogCell: GIGridSelfSizingCell<Message> {
     // chatTextView determine the size of bubbleView
     chatTextView.add(to: bubbleView).filling()
     bubbleView.add(to: contentView).roundedCorner(8)
-      .vLining() {
-        // losen bubbleView's bottomAnchor to contentView's bottomAnchor constraint
-        // strech contentView's height, but not strictly
-        $0[1].priority = UILayoutPriority(750) }
+      .vLining()
       .hLining(edgeInsets: .init(16)) {
         // bubbleView's width not equal to contentView's width which is determined by
         // its width constraint whose constant is assigned in cellForItem
@@ -47,10 +44,10 @@ class ChatLogCell: GIGridSelfSizingCell<Message> {
   }
   
   override func didSetItem() {
-    chatTextView.text = item.text
+    chatTextView.text = item.content
     // if from current user, disable leading constraint and enable trailing constraint
     // if not from current user, do the opposite
-    if item.isFromCurrentUser {
+    if item.isFromCurrUser {
       bubbleHorizontalConstraints[0].isActive = false
       bubbleHorizontalConstraints[1].isActive = true
       bubbleView.backgroundColor = UIColor(rgb: (2, 122, 255))
@@ -62,5 +59,6 @@ class ChatLogCell: GIGridSelfSizingCell<Message> {
       chatTextView.textColor = .black
     }
   }
+  
 }
 

@@ -26,6 +26,7 @@ class MatchUserCell: UICollectionViewCell, UserInfoCell {
   
   func setup() {
     profileImageView = UIImageView.new(cornerRadius: 30)
+    profileImageView.addBorder(width: 0.5, uiColor: UIColor(white: 0.5, alpha: 0.5))
     usernameLabel = UILabel.new("", .caption1, UIColor(rgb: 57), .center)
     vStack(
       profileImageView.sizing(to: 60),

@@ -8,16 +8,20 @@
 
 import FirebaseStorage
 
-let sto = StorageManager()
+unowned let sto = StorageManager.shared
 
 enum StorageError: Error {
   case noResponse
 }
 
 class StorageManager {
+  
+  static var shared = StorageManager()
+  
+  private init() {}
 
-  var storage: Storage { Storage.storage() }
-  var storageRef: StorageReference { Storage.storage().reference() }
+  private var storage: Storage { Storage.storage() }
+  private var storageRef: StorageReference { Storage.storage().reference() }
   
   enum StorageChild: String {
     case profileImages = "profile_images"
@@ -60,7 +64,7 @@ class StorageManager {
     completion: @escaping ([String?]) -> Void
   ) {
     let dispatchGroup = DispatchGroup()
-    var imageUrls = user.imageUrls
+    var imageUrls = user.info.imageUrls
     for i in 0..<imageDataArray.count {
       // if there is imageData, means need to update
       guard let imageData = imageDataArray[i] else { continue }

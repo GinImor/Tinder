@@ -6,9 +6,9 @@ target 'Tinder' do
   use_frameworks!
 
   # Pods for Tinder
-  pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
+  pod 'Firebase/Database'
   pod 'SDWebImage', '~> 5.0'
   pod 'JGProgressHUD'
 

@@ -208,4 +208,6 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
+Tinder/GoogleService-Info.plist
+
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains+all

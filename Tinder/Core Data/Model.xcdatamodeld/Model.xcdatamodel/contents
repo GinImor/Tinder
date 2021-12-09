@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="MatchUser" representedClassName="MatchUser" syncable="YES" codeGenerationType="class">
+        <attribute name="chatRoomId" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="matchDate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="matchedUid" optional="YES" attributeType="String"/>
+        <relationship name="recentMessage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Message" inverseName="user" inverseEntity="Message"/>
+    </entity>
+    <entity name="Message" representedClassName="Message" syncable="YES" codeGenerationType="class">
+        <attribute name="chatRoomId" optional="YES" attributeType="String"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="creationDate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="fromUid" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="toUid" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MatchUser" inverseName="recentMessage" inverseEntity="MatchUser"/>
+    </entity>
+    <elements>
+        <element name="MatchUser" positionX="-374.6754150390626" positionY="299.0787353515625" width="128" height="118"/>
+        <element name="Message" positionX="-379.9445190429688" positionY="513.38818359375" width="128" height="163"/>
+    </elements>
+</model>

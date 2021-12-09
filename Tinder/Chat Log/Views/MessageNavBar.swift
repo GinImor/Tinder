@@ -11,12 +11,13 @@ import GILibrary
 
 class MessageNavBar: UIView {
   
-  private let match: IdentifiableUser
+  private let match: Match
   
   private let profileImageView = UIImageView.new()
   private let nameLabel: UILabel = {
     let label = UILabel()
     label.text = "USERNAME"
+    label.textColor = .darkGray
     label.textAlignment = .center
     return label
   }()
@@ -26,7 +27,7 @@ class MessageNavBar: UIView {
     imageName: "flag", textStyle: .title3, tintColor: UIColor(rgb: (255, 81, 80)))
   
   
-  init(match: IdentifiableUser) {
+  init(match: Match) {
     self.match = match
     super.init(frame: .zero)
     setup()
@@ -47,6 +48,7 @@ class MessageNavBar: UIView {
     .add(to: self).filling(self)
    
     profileImageView.sizing(to: 44).roundedCorner(22)
+    profileImageView.addBorder(width: 0.5, uiColor: UIColor(white: 0.5, alpha: 0.5))
     shadow(opacity: 0.2, radius: 8, offset: CGSize(height: 10), color: .whiteWithAlpha(0.3))
     
     let (name, imageUrl) = db.matchUserInfo(for: match.uid)
@@ -70,9 +72,11 @@ class MessageNavBar: UIView {
   
   func setUserInfo(name: String?, imageUrl: String?) {
     nameLabel.text = name
+    nameLabel.textColor = .label
     if let imageUrl = imageUrl {
       profileImageView.sd_setImage(with: URL(string: imageUrl))
     }
   }
+  
 }
 

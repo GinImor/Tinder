@@ -8,7 +8,7 @@
 
 import FirebaseAuth
 
-let auth = AuthManager()
+unowned let auth = AuthManager.shared
 
 enum AuthError: Error {
   case notSignedIn
@@ -17,6 +17,10 @@ enum AuthError: Error {
 }
 
 class AuthManager {
+  
+  static let shared = AuthManager()
+  
+  private init() {}
   
   var currentUser: FirebaseAuth.User? { Auth.auth().currentUser }
   var uid: String? { Auth.auth().currentUser?.uid }

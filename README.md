@@ -1,6 +1,6 @@
 ## Overview
 
-Tinder is a social app that allows user to browse other users images, check out their bios, and swipe left or right to express dislike or like. if both users like each other, they can start chatting.
+Tinder is a social app that allows user to browse other users images, check out their bios, and swipe left or right to express dislike or like. if both users like each other, they can start chatting. Firebase and Core Data are used to store and manage user data.
 
 ## Feature
 

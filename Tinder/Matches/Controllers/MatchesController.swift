@@ -8,24 +8,30 @@
 
 import UIKit
 import GILibrary
+import CoreData
 
 class MatchesController: UIViewController {
 
   var user: User?
   
   private let matchesNavBar = MatchesNavBar()
-  private var hasMoreMatches = true
-  private var matchUsers = [MatchUser]()
   
-  private var messageUserId = [String]()
-  private let cache = RecentMessagesLRUCache(capacity: 10)
-
-  private let matchUserCellId = "MatchUserCellId"
   private let RecentMessageCellId = "RecentMessageCellId"
   
-  private var matchUserGalleryCell = MatchUserGalleryCell(style: .default, reuseIdentifier: "")
+  private let matchUserGalleryCell = UITableViewCell(style: .default, reuseIdentifier: nil)
+  private var matchUserGalleryController: MatchUsersGalleryController!
   
   private weak var tableView: UITableView!
+  
+  lazy private var fetchedResultsController: NSFetchedResultsController<Message> = {
+    let fetchRequest = Message.fetchRequest()
+    fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(Message.creationDate), ascending: false)]
+    let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                         managedObjectContext: tempDataStack.mainContext,
+                                         sectionNameKeyPath: nil, cacheName: nil)
+    frc.delegate = self
+    return frc
+  }()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -48,9 +54,9 @@ class MatchesController: UIViewController {
     // if it's transitioning to ChatLogCcontroller, don't need to do this
     // only applied to removing from the navigation controller
     if isMovingFromParent {
-      // set the lastMatchesTimestamp to nil for MatchUsersController
-      db.nullifyLastMatchesTimestamp()
+      db.removeMatchesListener()
       db.removeRecentMessagesListener()
+      tempDataStack.deleteAll()
     }
   }
   
@@ -69,6 +75,19 @@ class MatchesController: UIViewController {
   }
   
   private func setupViews() {
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.sectionInset = .init(0, 16)
+    flowLayout.scrollDirection = .horizontal
+    matchUserGalleryController = MatchUsersGalleryController(collectionViewLayout: flowLayout)
+    matchUserGalleryController.didTappedMatchUser = { [unowned self] matchUser in
+      self.presentChatLog(for: matchUser.chatRoomId)
+    }
+    addChild(matchUserGalleryController)
+    let cellContentView = matchUserGalleryCell.contentView
+    matchUserGalleryController.view.add(to: cellContentView)
+      .filling(cellContentView, edgeInsets: .init(8, 0))
+    matchUserGalleryController.didMove(toParent: self)
+    
     let tv = UITableView()
     tv.delegate = self
     tv.dataSource = self
@@ -77,11 +96,6 @@ class MatchesController: UIViewController {
     tv.separatorStyle = .none
     tv.add(to: view).filling(view)
     tableView = tv
-    
-    let cv = matchUserGalleryCell.collectionView
-    cv?.delegate = self
-    cv?.dataSource = self
-    cv?.register(MatchUserCell.self, forCellWithReuseIdentifier: matchUserCellId)
     
     navigationController?.navigationBar.isHidden = true
     UIView(backgroundColor: .white).add(to: view)
@@ -92,6 +106,7 @@ class MatchesController: UIViewController {
   }
   
   private func fetchData() {
+    try? fetchedResultsController.performFetch()
     db.fetchCurrentUserIfNecessary {
       [weak self] user, error in
       if let error = error {
@@ -101,38 +116,20 @@ class MatchesController: UIViewController {
         return
       }
       self?.user = user
-      self?.fetchMatchUsers()
+      self?.matchUserGalleryController.fetchMatchUsers()
       self?.fetchRecentMessages()
     }
   }
   
-  private func fetchMatchUsers() {
-    db.fetchMatches {
-      [weak self, weak cv = self.matchUserGalleryCell.collectionView] matches, error in
-      guard let self = self else { return }
-      if let error = error {
-        print("fetching matches error", error)
-        return
-      }
-      print("successfully fetch matches: ", matches!)
-      self.matchUsers = matches ?? []
-      cv?.reloadData()
-    }
-  }
-
+ 
   private func fetchRecentMessages() {
-    db.listenToRecentMessages { [weak self] recentMessages, error in
+    db.listenToRecentMessages { error in
       // listener observes the recent message updates in firestore
-      guard let self = self else { return }
       if let error = error {
         print("fetch recent messages error", error)
         return
       }
       print("successfully fetch recent messages")
-      guard let recentMessages = recentMessages else { return }
-      recentMessages.forEach({ self.cache.put(value: $0) })
-      self.messageUserId = self.cache.allKeys()
-      self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
   }
  
@@ -140,14 +137,20 @@ class MatchesController: UIViewController {
     navigationController?.popViewController(animated: true)
   }
   
-  private func recentMessageFor(_ indexPath: IndexPath) -> RecentMessage? {
-    cache.get(key: messageUserId[indexPath.item])
-  }
-  
-  private func presentChatLog(withMatchUser matchUser: IdentifiableUser) {
-    let chatLogController = ChatLogController(match: matchUser, current: user)
+  private func presentChatLog(for localChatRoomId: String?) {
+    guard let localChatRoomId = localChatRoomId else { return }
+    let chatLogController = ChatLogController(match: Match(localChatRoomId), current: user)
     navigationController?.pushViewController(chatLogController, animated: true)
   }
+  
+  private func globalized(_ indexPath: IndexPath) -> IndexPath {
+    [0, indexPath.row]
+  }
+  
+  private func localized(_ indexPath: IndexPath) -> IndexPath {
+    [1, indexPath.row]
+  }
+  
 }
 
 
@@ -159,8 +162,9 @@ extension MatchesController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
-    guard let recentMessage = recentMessageFor(indexPath) else { return }
-    presentChatLog(withMatchUser: recentMessage)
+    let message = fetchedResultsController.object(at: globalized(indexPath))
+    guard let cloudChatRoomId = message.chatRoomId else { return }
+    presentChatLog(for: cloudChatRoomId + " " + message.chattingUid)
   }
   
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -183,17 +187,17 @@ extension MatchesController: UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return section == 0 ? 1 : messageUserId.count
+    return section == 0 ? 1 : (fetchedResultsController.fetchedObjects?.count ?? 0)
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     if indexPath.section == 0 { return matchUserGalleryCell }
     let cell = tableView.dequeueReusableCell(withIdentifier: RecentMessageCellId, for: indexPath)
     as! RecentMessageCell
-    let recentMessage = recentMessageFor(indexPath)!
-    let uid = recentMessage.uid
+    let recentMessage = fetchedResultsController.object(at: globalized(indexPath))
+    let uid = recentMessage.chattingUid
     cell.uid = uid
-    cell.message = recentMessage.text
+    cell.message = recentMessage.content
     let (name, imageUrl) = db.matchUserInfo(for: uid)
     if imageUrl == nil {
       // the user info is just a placeholder, doesn't have the real content
@@ -209,55 +213,34 @@ extension MatchesController: UITableViewDataSource {
 }
 
 
-extension MatchesController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-  
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                      sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return CGSize(width: 80, height: collectionView.bounds.height)
-  }
-  
-  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    presentChatLog(withMatchUser: matchUsers[indexPath.item])
-  }
-  
-}
+// MARK: - Fetched Results Controller Delegate
 
-
-extension MatchesController: UICollectionViewDataSource {
+extension MatchesController: NSFetchedResultsControllerDelegate {
   
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return matchUsers.count
+  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    tableView.beginUpdates()
   }
   
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: matchUserCellId, for: indexPath) as! MatchUserCell
-    let uid = matchUsers[indexPath.item].uid
-    cell.uid = uid
-    let (name, imageUrl) = db.matchUserInfo(for: uid)
-    if imageUrl == nil {
-      // hit the placeholder, means the data is being fetched, so register to the db
-      // so that when the data arrived the cell will be notified
-      db.registerMatchUserCell(cell)
-    } else {
-      cell.setUsername(name, imageUrl: imageUrl)
+  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any,
+                  at indexPath: IndexPath?,
+                  for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    switch type {
+    case .insert:
+      tableView.insertRows(at: [localized(newIndexPath!)], with: .automatic)
+    case .delete:
+      tableView.deleteRows(at: [localized(indexPath!)], with: .automatic)
+    case .update:
+      tableView.reloadRows(at: [localized(indexPath!)], with: .automatic)
+    case .move:
+      tableView.deleteRows(at: [localized(indexPath!)], with: .automatic)
+      tableView.insertRows(at: [localized(newIndexPath!)], with: .automatic)
+    @unknown default:
+      print("Unexpected NSFetchedResultsChangeType")
     }
-    // once reach the last item, and there are more matches to fetch, fetch them
-    if indexPath.item == matchUsers.count - 1 && hasMoreMatches {
-      db.fetchMatches {
-        [weak self, weak cv = collectionView] (matchUsers, error) in
-        if let error = error {
-          print("fetch matches error: ", error)
-        }
-        guard let matchUsers = matchUsers else { return }
-        if matchUsers.isEmpty {
-          self?.hasMoreMatches = false
-          return
-        }
-        self?.matchUsers.append(contentsOf: matchUsers)
-        cv?.reloadData()
-      }
-    }
-    return cell
+  }
+  
+  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    tableView.endUpdates()
   }
   
 }

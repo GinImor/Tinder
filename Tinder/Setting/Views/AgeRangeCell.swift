@@ -69,10 +69,10 @@ class AgeRangeCell: UITableViewCell {
   
   func setSeekingAgeForUser(_ user: User?) {
     guard let user = user else { return }
-    minSlider.value = Float(user.minSeekingAge)
-    maxSlider.value = Float(user.maxSeekingAge)
-    minLabel.text = "Min: \(user.minSeekingAge)"
-    maxLabel.text = "Max: \(user.maxSeekingAge)"
+    minSlider.value = Float(user.preference.minSeekingAge)
+    maxSlider.value = Float(user.preference.maxSeekingAge)
+    minLabel.text = "Min: \(user.preference.minSeekingAge)"
+    maxLabel.text = "Max: \(user.preference.maxSeekingAge)"
   }
   
 }

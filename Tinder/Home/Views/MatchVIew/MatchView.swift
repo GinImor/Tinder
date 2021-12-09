@@ -10,7 +10,7 @@ import UIKit
 import GILibrary
 
 protocol MatchViewDelegate: AnyObject {
-  func didTappedSendMessageButton(matchUser: IdentifiableUser)
+  func didTappedSendMessageButton(match: Match, currUid: String)
 }
 
 class MatchView: UIView {
@@ -19,6 +19,7 @@ class MatchView: UIView {
   
   weak var delegate: MatchViewDelegate?
   
+  private let match: Match
   private let matchedUser: CardModel
   private let currentUser: CardModel
   
@@ -41,7 +42,7 @@ class MatchView: UIView {
   private let keepSwipingButton: UIButton = {
     let button = BorderGradientButton()
     button.setTitle("Keep Swiping", for: .normal)
-    button.setTitleColor(.white, for: .normal)
+    button.setTitleColor(.black, for: .normal)
     return button
   }()
   
@@ -54,7 +55,8 @@ class MatchView: UIView {
     return imageView
   }
   
-  public init(matchedUser: CardModel, currentUser: CardModel) {
+  public init(match: Match, matchedUser: CardModel, currentUser: CardModel) {
+    self.match = match
     self.matchedUser = matchedUser
     self.currentUser = currentUser
     super.init(frame: .zero)
@@ -158,7 +160,7 @@ class MatchView: UIView {
   }
   
   @objc private func handleSendMessage() {
-    delegate?.didTappedSendMessageButton(matchUser: matchedUser)
+    delegate?.didTappedSendMessageButton(match: match, currUid: currentUser.uid)
     removeFromSuperview()
   }
   

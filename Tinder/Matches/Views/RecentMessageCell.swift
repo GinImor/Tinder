@@ -56,6 +56,7 @@ class RecentMessageCell: UITableViewCell, UserInfoCell {
   
   func setup() {
     profileImageView = UIImageView.new(cornerRadius: 45)
+    profileImageView.addBorder(width: 0.5, uiColor: UIColor(white: 0.5, alpha: 0.5))
     usernameLabel = UILabel.new("", .title3)
     messageLabel.textColor = .systemGray
     hStack(

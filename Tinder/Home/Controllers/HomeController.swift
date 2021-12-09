@@ -52,7 +52,6 @@ class HomeController: UIViewController {
     setupViews()
     setupUserBasedObject()
     fetchData()
-    print("view fraome", view.bounds)
   }
   
   // promise in the Home, there is always a user logged in
@@ -127,18 +126,18 @@ class HomeController: UIViewController {
       self.hasFetchedSwipedUsers = true
       // has swiped users, go fetch the qualified users
       db.fetchUsersBetweenAgeRange(
-        minAge: user.minSeekingAge,
-        maxAge: user.maxSeekingAge,
+        minAge: user.preference.minSeekingAge,
+        maxAge: user.preference.maxSeekingAge,
         swipedUsers: self.swipedUsers) { [unowned self] (newUsers, error) in
-        self.hud.dismiss()
-        guard error == nil else {
-          print("fetch users error: \(String(describing: error))")
-          return
+          self.hud.dismiss()
+          guard error == nil else {
+            print("fetch users error: \(String(describing: error))")
+            return
+          }
+          print("successfully fetched users")
+          guard let newUsers = newUsers else { return }
+          self.cardDeckView.refresh(with: newUsers)
         }
-        print("successfully fetched users")
-        guard let newUsers = newUsers else { return }
-        self.cardDeckView.refresh(with: newUsers)
-      }
     }
   }
 
@@ -152,19 +151,21 @@ class HomeController: UIViewController {
   private func uploadLikingStateOnCard(_ card: CardView, like: Bool) {
     let currUid = user!.uid
     db.setLikeStateForUid(currUid, on: card.uid, to: like) {
-      [weak self] error in
+      [weak self] chatRoomId, error in
       if let error = error { print("liking user error", error); return }
       // upload can be slow, in the meantime, user might change the account to something else
       // so need to check if the user is the same user that initiate the upload process
       // if not, doesn't present the match view, but the upload process need to be done
-      guard let matchedCardModel = card.cardViewModel?.cardModel,
+      guard let chatRoomId = chatRoomId,
+            let matchedCardModel = card.cardViewModel?.cardModel,
             let currentUser = self?.user, currUid == currentUser.uid else { return }
-      self?.presentMatchView(matchedUser: matchedCardModel, currentUser: currentUser)
+      let match = Match(uid: matchedCardModel.uid, cloudChatRoomId: chatRoomId)
+      self?.presentMatchView(match: match, matchedUser: matchedCardModel, currentUser: currentUser.info)
     }
   }
   
-  private func presentMatchView(matchedUser: CardModel, currentUser: CardModel) {
-    let matchView = MatchView(matchedUser: matchedUser, currentUser: currentUser)
+  private func presentMatchView(match: Match, matchedUser: CardModel, currentUser: CardModel) {
+    let matchView = MatchView(match: match, matchedUser: matchedUser, currentUser: currentUser)
     matchView.delegate = self
     matchView.add(to: view).filling(view).alpha = 0.0
     UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0,
@@ -183,10 +184,7 @@ class HomeController: UIViewController {
   
   @IBAction private func handleSuperLike() { swipeCardToRight(true) }
   
-  @IBAction private func handleRefresh() {
-//    fetchQualifiedUsers()
-    cardDeckView.rewind()
-  }
+  @IBAction private func handleRefresh() { fetchQualifiedUsers() }
 
   @IBAction private func handleSettings() {
     let settings = SettingsController()
@@ -226,9 +224,9 @@ extension HomeController: SettingsControllerDelegate {
     // if either the seeking age change, roll back to the begining
     // and fetch the new qualified users
     // if not change, just get the new user
-    if user?.minSeekingAge != newUser.minSeekingAge ||
-        user?.maxSeekingAge != newUser.maxSeekingAge {
-      db.nullifyHomeDocSnapshot()
+    if user?.preference.minSeekingAge != newUser.preference.minSeekingAge ||
+        user?.preference.maxSeekingAge != newUser.preference.maxSeekingAge {
+      db.nullifyHomePaginationKey()
       fetchQualifiedUsers()
     }
     user = newUser
@@ -249,7 +247,7 @@ extension HomeController: LoginRegisterControllerDelegate {
     dismiss(animated: true)
     user = nil
     hasFetchedSwipedUsers = false
-    db.nullifyHomeDocSnapshot()
+    db.nullifyHomePaginationKey()
     fetchData()
   }
 }
@@ -282,10 +280,11 @@ extension HomeController: CardViewDelegate {
 
 extension HomeController: MatchViewDelegate {
   
-  func didTappedSendMessageButton(matchUser: IdentifiableUser) {
-    let chatLogController = ChatLogController(match: matchUser, current: user)
+  func didTappedSendMessageButton(match: Match, currUid: String) {
+    let chatLogController = ChatLogController(match: match, current: user)
     navigationController?.pushViewController(chatLogController, animated: true)
   }
+  
 }
 
 extension HomeController: UserDetailsControllerDelegate {

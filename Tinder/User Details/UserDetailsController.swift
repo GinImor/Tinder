@@ -54,7 +54,6 @@ class UserDetailsController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    print("user detail view did load")
     setupViews()
   }
   

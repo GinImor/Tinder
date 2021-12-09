@@ -86,7 +86,7 @@ class SettingsController: UITableViewController {
   
   private func fetchCurrentUserInfo() {
     db.fetchCurrentUserIfNecessary {
-      self.hud.show(in: self.view)
+      self.hud.show(in: self.navigationController?.view ?? self.view)
     } completion: {
       [weak self] user, error in
       self?.hud.dismiss()
@@ -104,10 +104,9 @@ class SettingsController: UITableViewController {
   
   private func loadImages() {
     guard let user = self.user else { return }
-    for i in 0..<user.imageUrls.count {
-      if let imageUrlString = user.imageUrls[i], let imageUrl = URL(string: imageUrlString) {
+    for i in 0..<user.info.imageUrls.count {
+      if let imageUrlString = user.info.imageUrls[i], let imageUrl = URL(string: imageUrlString) {
         imageButtons[i].showLoading()
-        print("downloading image url ", imageUrlString)
         SDWebImageManager.shared.loadImage(with: imageUrl, options: .continueInBackground, progress: nil)
         { [weak self] (image, data, _, _, _, _) in
           defer { self?.imageButtons[i].hideLoading() }
@@ -155,8 +154,10 @@ class SettingsController: UITableViewController {
     if indexPath.section == 5 {
       let cell = AgeRangeCell(style: .default, reuseIdentifier: "ageRangeCell")
       cell.setSeekingAgeForUser(user)
-      cell.minAgeDidChange = { [unowned self] minAge in self.user?.minSeekingAge = minAge }
-      cell.maxAgeDidChange = { [unowned self] maxAge in self.user?.maxSeekingAge = maxAge }
+      cell.minAgeDidChange = { [unowned self] minAge in
+        self.user?.preference.minSeekingAge = minAge }
+      cell.maxAgeDidChange = { [unowned self] maxAge in
+        self.user?.preference.maxSeekingAge = maxAge }
       return cell
     }
     
@@ -164,34 +165,39 @@ class SettingsController: UITableViewController {
     switch indexPath.section {
     case 1:
       cell.textField.placeholder = "Enter Name"
-      cell.textField.text = user?.name ?? ""
+      cell.textField.text = user?.info.name ?? ""
       cell.textField.addTarget(self, action: #selector(didEditedName), for: .editingChanged)
     case 2:
       cell.textField.placeholder = "Enter Profession"
-      cell.textField.text = user?.profession ?? ""
+      cell.textField.text = user?.info.profession ?? ""
       cell.textField.addTarget(self, action: #selector(didEditedProfession), for: .editingChanged)
     case 3:
       cell.textField.placeholder = "Enter Age"
-      if let age = user?.age { cell.textField.text = String(age) }
+      if let age = user?.info.age { cell.textField.text = String(age) }
       cell.textField.addTarget(self, action: #selector(didEditedAge), for: .editingChanged)
     case 4:
       cell.textField.placeholder = "Enter Bio"
-      cell.textField.text = ""
+      cell.textField.text = user?.info.bio
+      cell.textField.addTarget(self, action: #selector(didEditedBio), for: .editingChanged)
     default: ()
     }
     return cell
   }
   
   @objc private func didEditedName(_ textField: UITextField) {
-    user?.name = textField.text ?? ""
+    user?.info.name = textField.text ?? ""
   }
   
   @objc private func didEditedProfession(_ textField: UITextField) {
-    user?.profession = textField.text ?? ""
+    user?.info.profession = textField.text
   }
   
   @objc private func didEditedAge(_ textField: UITextField) {
-    user?.age = Int(textField.text ?? "")
+    user?.info.age = Int(textField.text ?? "")
+  }
+  
+  @objc private func didEditedBio(_ textField: UITextField) {
+    user?.info.bio = textField.text
   }
   
   private func selectPhotoButton() -> LoadingButton {
@@ -224,7 +230,6 @@ class SettingsController: UITableViewController {
     guard var user = self.user else { return }
     let hud = JGProgressHUD.new("Uploading")
     hud.show(in: navigationController?.view ?? view)
-    hud.layer.zPosition = 1
     // record which image should be uploaded
     var imageDataArray = [Data?](repeating: nil, count: 3)
     for i in 0..<3 {
@@ -233,15 +238,14 @@ class SettingsController: UITableViewController {
         if let originalImage = self.originalImages[i], originalImage.isEqual(buttonImage) {
           continue
         }
-        print("did change image \(i)")
         imageDataArray[i] = buttonImage.scaledJpegDataForUpload
       }
     }
     // upload new images to storage, delete old images,
     // update user with the returned imageUrls to firestore
     sto.uploadImages(imageDataArray, for: user) { (imageUrls) in
-      user.imageUrls = imageUrls
-      db.uploadUser(user) { [weak self] (error) in
+      user.info.imageUrls = imageUrls
+      db.updateUser(user) { [weak self] (error) in
         hud.dismiss()
         self?.delegate?.didSaveNewUser(user)
         self?.dismiss(animated: true)

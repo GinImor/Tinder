@@ -16,7 +16,7 @@ protocol CardModel: IdentifiableUser {
   var validImageUrls: [String] { get }
 }
 
-extension User: CardModel {
+extension User.Info: CardModel {
   
   var displayName: String { name }
   
